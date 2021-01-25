@@ -1,0 +1,28 @@
+form {
+
+    input[type="text"], input[type="search"], input[type="number"] {
+        border: 1px solid $gray-2;
+        padding: 5px 10px 9px 10px;
+        color: $gray;
+        font-family: $font-main;
+        &::placeholder {
+          color: $gray;
+          font-family: $font-main;
+          font-size: 13px;
+        }
+    }
+    select {
+        appearance: none;
+        border: 1px solid $gray-2;
+        padding: 9px 20px 9px 10px;
+        background-color: white;
+        color: $gray;
+        font-family: $font-main;
+        border-radius: 20px;
+        background-image: url(../assets/icons/arrow-down.svg);
+        background-repeat: no-repeat;
+        background-position: 95% center;
+        background-size: 10px;
+        
+    }
+}

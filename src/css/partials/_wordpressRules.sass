@@ -1,7 +1,7 @@
 .site-main
     & > *:not(section):not(.container-fluid):not(.mask-iframe)
-        padding-left: 30px
-        padding-right: 30px
+        padding-left: 15px
+        padding-right: 15px
         margin-right: auto
         margin-left: auto
         width: 100%
@@ -64,7 +64,7 @@
                 // font-family: $font-third
                 margin-bottom: 5px
 
-.wp-block-column, .wp-block-group__inner-container
+.wp-block-column, .wp-block-group__inner-container, .woocommerce-Tabs-panel
     & > h1, & > h2, & > h3, & > h4, & > h5, & > h6
         font-family: $font-main
         margin-bottom: 15px
@@ -103,7 +103,12 @@
         font-size: 1em
         & *
             font-size: inherit
+    img
+        width: auto
 
 .wp-block-image img
     width: auto
 
+.woocommerce-Tabs-pane
+    h2:first-child
+        display: none

@@ -71,12 +71,12 @@ table.shop_table_responsive tr td.download-actions .button {
 /**
  * Products
  */
-ul.products {
+/* ul.products {
 	margin: 0;
 	padding: 0;
-}
+} */
 
-ul.products li.product {
+/* ul.products li.product {
 	list-style: none;
 	position: relative;
 	margin-bottom: 2em;
@@ -86,9 +86,6 @@ ul.products li.product img {
 	display: block;
 }
 
-ul.products li.product .button {
-	display: block;
-}
 
 @media screen and (min-width: 48em) {
 
@@ -130,7 +127,7 @@ ul.products li.product .button {
 	ul.products.columns-6 li.product {
 		width: 13.49333%;
 	}
-}
+} */
 
 /**
  * Single product
@@ -404,6 +401,7 @@ p.stars.selected a:not(.active)::before {
 
 .woocommerce-tabs .panel h2:first-of-type {
 	margin-bottom: 1em;
+	display: none;
 }
 
 /**

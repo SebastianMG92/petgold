@@ -119,6 +119,7 @@
     opacity: 1;
     display: block;
     margin: 0 20px 0 0;
+    background-color: transparent;
   }
 }
 
@@ -175,7 +176,7 @@
   // }
 }
 
-
+ 
 .header__rightMenu--searchForm {
   position: absolute;
   top: 100%;
@@ -197,13 +198,6 @@
   }
   input[type="text"] {
     flex-grow: 1;
-    border: 1px solid $gray-2;
-    padding: 5px 10px;
-    &::placeholder {
-      color: $gray;
-      font-family: $font-main;
-      font-size: 13px;
-    }
   }
   input[type="submit"] {
     background-color: $purple;
@@ -540,4 +534,26 @@
 //////////////////
 .header__button--black span {
   background-color: $black;
+}
+
+
+
+
+//////////////////////////////
+/// header Transparent
+/////////////////////////////
+
+.header.header-transparent {
+  background-color: transparent;
+  &.is-sticky {
+    background-color: white;
+    .header__desktopMenu .menu-item a {
+      color: $green;
+    }
+  }
+  @include breakpoint(lg) {
+    .header__desktopMenu .menu-item a {
+      color: black;
+    }
+  }
 }
