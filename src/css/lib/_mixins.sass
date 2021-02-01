@@ -20,6 +20,9 @@
    @else if $point == xl 
       @media only screen and (min-width: 1200px) 
          @content
+   @else if $point == xxl
+      @media only screen and (min-width: 1400px) 
+         @content
    @else if $point == ipadH
       @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2)
          @content

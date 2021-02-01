@@ -185,6 +185,12 @@ if( function_exists('acf_add_options_page') ) {
 }
 
 /**
+ * Implement the Custom Blocks.
+ */
+require get_template_directory() . '/inc/custom-blocks.php';
+
+
+/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';

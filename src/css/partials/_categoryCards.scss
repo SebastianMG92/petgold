@@ -3,7 +3,10 @@
     background-size: contain;
     background-position: right center;
     background-repeat: no-repeat;
-    background-image: initial !important;
+    // background-image: initial !important;
+    .col-12 {
+        margin-bottom: 50px;
+    }
 }
 
 .categoryCards__heading {
@@ -12,13 +15,20 @@
         color: $green;
         margin: 0 0 50px;
     }
+    & > .text {
+        max-width: 600px;
+        margin: 0 auto 50px;
+
+    }
 }
 
 .categoryCards__card {
     border-radius: 20px;
     overflow: hidden;
     max-width: 300px;
-    margin: 0 auto 20px;
+    margin: 0 auto;
+    height: 100%;
+
     @include breakpoint(lg) {
         max-width: initial;
         margin: 0 auto;
@@ -46,6 +56,12 @@
 .categoryCards__card--content {
     padding: 10px 20px 25px;
     text-align: center;
+
+    height: calc(100% - 150px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     .icon {
         max-width: 45px;
         margin: 0 auto 10px;
@@ -62,6 +78,9 @@
         * {
             color: white;
         }
+    }
+    .btn-arrow {
+        margin-top: 10px;
     }
 }
 

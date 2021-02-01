@@ -18,8 +18,8 @@ import '../css/style.sass';
 
 // GSAP
 import gsap from "gsap";
-import { TweenMax, TimelineMax, Power2, Linear} from "gsap/all";
-gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear);
+import { TweenMax, TimelineMax, Power2, Linear, Back} from "gsap/all";
+gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear, Back);
 
 //swiper
 import Swiper from "swiper";
@@ -121,15 +121,15 @@ class Header {
       this.menuButton.classList.add('is-active');
       this.mainMenu.classList.add('is-active');
       this.headerContainer.classList.add('is-active');
-      document.body.classList.add('hidde-over');
+      document.body.classList.add('hidde-overlay');
       // this.accesibilityInit({matches: true});
 
       this.mainMenu.style.display = 'block';
 
-      TweenMax.to(this.mainMenu, .5 , {
+      TweenMax.to(this.mainMenu, .3 , {
         delay: .2,
-        width: '100%',
-        opacity: 1,
+        ease: Power2.easeInOut,
+        x: 0,
       });
       TweenMax.to(this.socialMobile, .8, {
         delay: .2,
@@ -147,7 +147,7 @@ class Header {
       this.menuButton.classList.remove('is-active');
       this.mainMenu.classList.remove('is-active');
       this.headerContainer.classList.remove('is-active');
-      document.body.classList.remove('hidde-over');
+      document.body.classList.remove('hidde-overlay');
       // this.accesibilityInit({matches: false});
 
       TweenMax.to(this.menuItems, 0, {
@@ -160,8 +160,7 @@ class Header {
       
       TweenMax.to(this.mainMenu, .3 , {
         delay: .1,
-        width: 0,
-        opacity: 0,
+        x: '-80vw',
         onComplete: () => {
           TweenMax.set(this.mainMenu, {clearProps:"all"});
         },
@@ -250,7 +249,8 @@ class Header {
 class Sliders {
   constructor() {
     this.headerSlide = document.querySelectorAll('.js-header-slide');
-    this.productSlide = document.querySelectorAll('.js-product-slide')
+    this.productSlide = document.querySelectorAll('.js-product-slide');
+    this.largeSlide = document.querySelectorAll('.js-slide-large')
     this.start();
   }
   start() {
@@ -268,6 +268,7 @@ class Sliders {
         arrow_next.classList.add('js-header-slide-next');
 
         let config = {
+          init: false,
           // Optional parameters
           loop: true,
           // Navigation arrows
@@ -277,13 +278,31 @@ class Sliders {
           },
         };
 
+        if (slide.dataset.autoplay) {
+          config.autoplay = {delay:slide.dataset.autoplay};
+        }
+
         if (slides.length <= 1) {
           config.init = false;
           arrow_prev.style.display = 'none';
           arrow_next.style.display = 'none';
         };
         
-        var headerSwiper = new Swiper(this.headerSlide, config)
+        var headerSwiper = new Swiper(this.headerSlide, config);
+
+        headerSwiper.on('init', e => {
+          const content = headerSwiper.slides[headerSwiper.activeIndex].querySelectorAll('.js-header-slide-anim');
+          gsap.to(content, .5,{
+            delay:.5,
+            opacity:1,
+            y: 0,
+            ease: Back.easeOut.config(4),
+            stagger: .1
+          });
+
+        });
+
+        headerSwiper.init();
 
       }
 
@@ -334,6 +353,54 @@ class Sliders {
           }
         })
       }
+    }
+    if (this.largeSlide.length > 0) {
+
+      for (let i = 0; i < this.largeSlide.length; i++) {
+        const slide = this.largeSlide[i];
+        const next_arrow = slide.querySelector('.swiper-button-next');
+        const prev_arrow = slide.querySelector('.swiper-button-prev');
+        const pagination = slide.querySelector('.swiper-pagination');
+
+        prev_arrow.classList.add(`js-slide-large-prev-${i}`);
+        next_arrow.classList.add(`js-slide-large-next-${i}`);
+        pagination.classList.add(`js-slide-large-pagination-${i}`);
+
+
+
+        let config = {
+          slidesPerView: 1,
+          spaceBetween: 10,
+          pagination: {
+            el: `.js-slide-large-pagination-${i}`,
+          },
+          navigation: {
+            nextEl: `.js-slide-large-next-${i}`,
+            prevEl: `.js-slide-large-prev-${i}`,
+          },
+          breakpoints: {
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 30            
+            },
+            992: {
+              slidesPerView: 3,
+              spaceBetween: 30            
+            }
+          }
+
+        };
+        
+        if (slide.dataset.delay) {
+          config.autoplay = {
+            delay: slide.dataset.delay,
+          }
+        };
+        
+        const swiper_slide = new Swiper(slide, config);
+
+      }
+
     }
   }
 }

@@ -60,7 +60,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba($color: #000000, $alpha: .3);
+        background-color: var(--custom-opacity);
         z-index: 0;
     }
     @include breakpoint(md) {
@@ -167,4 +167,10 @@
             max-width: 1140px;
         }
     }
+}
+
+.js-header-slide-anim {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: initial;
 }

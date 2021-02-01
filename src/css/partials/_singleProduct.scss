@@ -170,7 +170,7 @@
         }
     }
 
-    .woocommerce-variation-add-to-cart {
+    .woocommerce-variation-add-to-cart, .cart {
         display: flex;
         .quantity {
             max-width: 100px;
@@ -219,4 +219,9 @@
 
 .woo-variation-swatches .variable-items-wrapper .variable-item:not(.radio-variable-item).color-variable-item .variable-item-span-color {
     border-radius: 50% !important;
+}
+
+
+.woocommerce-product-attributes-item__label {
+    padding: 0 50px;
 }
