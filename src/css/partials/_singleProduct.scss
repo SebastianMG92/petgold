@@ -170,6 +170,10 @@
         }
     }
 
+    .variations_form {
+        display: flex;
+        flex-direction: column;
+    }
     .woocommerce-variation-add-to-cart, .cart {
         display: flex;
         .quantity {
@@ -197,8 +201,8 @@
             background-color: $purple;
             color: white;
         }
-
     }
+
     .product_meta {
         display: none;
     }
@@ -224,4 +228,23 @@
 
 .woocommerce-product-attributes-item__label {
     padding: 0 50px;
+}
+
+body.woo-variation-swatches.wvs-style-squared .variable-items-wrapper .variable-item.button-variable-item {
+    height: auto;
+    width: auto;
+    padding: 3px 4px 1px 3px;
+    border-radius: 5px !important;
+    border: 1px solid $gray !important;
+    box-shadow: initial !important;
+    color: $gray;
+    &:focus-within, &:hover {
+        color: white;
+        background-color: $purple;
+        border: 1px solid $purple !important;
+    }
+}
+
+.zoomImg {
+    background-color: white;
 }
