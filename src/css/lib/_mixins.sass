@@ -41,3 +41,10 @@
    @else if $point == ie
       @media all and (-ms-high-contrast: none), (-ms-high-contrast: active)
          @content
+
+
+@mixin fontfluid($font-max, $font-min)
+   $font-min-px: $font-min+'px'
+   $viewport: 100*1vw
+   $mobile: 320*1px
+   font-size: unquote( "calc(#{$font-min-px} + (#{$font-max} - #{$font-min}) * (#{$viewport} - #{$mobile}) / (#{767} - #{320}))" )

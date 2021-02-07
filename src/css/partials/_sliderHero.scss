@@ -1,11 +1,12 @@
 .sliderHero {
     position: relative;
-    height: 80vh;
-    min-height: 350px;
+    // height: 80vh;
+    // min-height: 350px;
     overflow: hidden;
     @include breakpoint(md) {
-        height: 80vh;
-        min-height: 600px;
+        // height: 80vh;
+        // min-height: 600px;
+        // max-height: 600px;
     }
 }
 
@@ -17,30 +18,89 @@
 }
 
 .sliderHero__container {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // position: relative;
     text-align: center;
-    max-width: 300px;
+    width: 100%;
+    max-width: 80%;
     z-index: 1;
     .subheading {
         color: $green;
+        margin: 0;
+        font-size: 18px;
+        @include fontfluid(20, 18);
     }
     .heading {
         color: white;
-        font-size: 35px;
+        font-size: 20px;
         margin: 0 0 10px;
+        @include fontfluid(40, 20);
     }
-    .text {
-        color: white;
+    .btn-radio {
+        font-size: 14px;
+        padding: 5px 8px;
     }
     @include breakpoint(md) {
-        margin: 0 0 80px 0;
-        max-width: 650px;
+        max-width: 90%;
         .subheading {
             font-size: 28px;
         }
         .heading {
-            font-size: 70px;
+            font-size: 50px;
+            margin: 0 0 20px;
         }
+        .btn-radio {
+            font-size: 16px;
+            padding: 9px 12px;
+        }
+    }
+    @include breakpoint(lg) {
+        transform: translate(-50%,0);
+        top: initial;
+        bottom: 15%;
+        .subheading {
+            font-size: 30px;
+        }
+        .heading {
+            font-size: 60px;
+            margin: 0 0 20px;
+        }
+        .btn-radio {
+            font-size: 18px;
+            padding: 9px 12px;
+        }
+    }
+}
+
+.sliderHero__image {
+    display: block;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 35%;
+    width: 100%;
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--custom-opacity);
+        z-index: 0;
+    }
+    img {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
     }
 }
 
@@ -53,16 +113,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: var(--custom-opacity);
-        z-index: 0;
-    }
     @include breakpoint(md) {
         align-items: flex-end;
     }
@@ -94,15 +144,13 @@
 
 .sliderHero__wave {
     position: absolute;
+    display: block;
     left: 0;
     right: 0;
     z-index: 1;
-    bottom: -4vw;
-    svg {
-        display: block;
-        path {
-            fill: white;
-        }
+    bottom: 0;
+    path {
+        fill: white;
     }
 }
 

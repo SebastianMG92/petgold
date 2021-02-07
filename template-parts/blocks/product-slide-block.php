@@ -64,13 +64,13 @@ $position = get_field('alineacion') ?: '';
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-12 col-md-6 productSlider__bg">
+            <div class="col-12 col-md-5 productSlider__bg">
                 <figure class="productSlider__bg--img">
                     <img src="<?php echo $image["url"]; ?>" alt="<?php echo $image["alt"]; ?>">
                 </figure>
             </div>
 
-            <div class="col-12 col-md-6 productSlider__content">
+            <div class="col-12 col-md-7 productSlider__content">
                 <div class="productSlider__content--info">
                     <h2 class="heading"><?php echo $title; ?></h2>
                     <div class="text">

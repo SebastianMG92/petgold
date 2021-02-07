@@ -154,6 +154,13 @@ function petgold_scripts() {
 add_action( 'wp_enqueue_scripts', 'petgold_scripts' );
 
 
+function reef_corporate_theme_setup() {
+	add_image_size( 'slider', 1920, 600, true ); 
+	add_image_size( 'icon', 50, 50, true ); 
+};
+add_action( 'after_setup_theme', 'reef_corporate_theme_setup' );
+
+
 if( function_exists('acf_add_options_page') ) {
 	
 	acf_add_options_page(array(

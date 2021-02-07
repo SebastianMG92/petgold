@@ -73,7 +73,17 @@ $position = get_field('posicion') ?: '';
                     $opacity = get_sub_field('overlay_opacidad');
                 
                 ?>
-                <div class="swiper-slide sliderHero__swiper--item" style="background-image: url( <?php echo $image["sizes"]["2048x2048"]; ?> );--custom-opacity: rgba(0,0,0,<?php echo $opacity; ?>)">
+                <?php
+                    // echo '<pre>';
+                    // var_dump($image);
+                    // echo '<pre>';
+                ?>
+                <div class="swiper-slide sliderHero__swiper--item">
+                    
+                    <a href="<?php echo $link_url; ?>" class="sliderHero__image" style="--custom-opacity: rgba(0,0,0,<?php echo $opacity; ?>)">
+                        <img class="swiper-lazy" data-src="<?php echo $image["sizes"]["slider"]; ?>" alt="<?php echo $image["alt"]; ?>">
+                        <div class="swiper-lazy-preloader"></div>
+                    </a>
                     <div class="sliderHero__container">
                         <?php if ($pre_heading) : ?>
                             <p class="subheading js-header-slide-anim"><?php echo $pre_heading; ?></p>
@@ -83,11 +93,9 @@ $position = get_field('posicion') ?: '';
                             <h2 class="heading js-header-slide-anim"><?php echo $heading; ?></h2>
                         <?php endif; ?>
 
-                        <?php if ($link_url) : ?>
-                            <a href="<?php echo $link_url; ?>" class="btn-bone js-header-slide-anim" target="<?php echo $link_target; ?>">
-                                <span class="text">
-                                    <?php echo $link_title; ?>
-                                </span>
+                        <?php if ($link_url && $link_title) : ?>
+                            <a href="<?php echo $link_url; ?>" class="btn-radio btn-purple js-header-slide-anim" target="<?php echo $link_target; ?>">
+                                <?php echo $link_title; ?>
                             </a>
                         <?php endif; ?>
 
@@ -101,11 +109,5 @@ $position = get_field('posicion') ?: '';
         <div class="swiper-button-prev sliderHero__swiper--prev"></div>
         <div class="swiper-button-next sliderHero__swiper--next"></div>
     </div>
-
-    <div class="sliderHero__wave">
-        <svg viewBox="0 0 1440 192">
-            <path class="st0" d="M0,128l60-32C120,64,240,0,360,5.3C480,11,600,85,720,96s240-43,360-53.3C1200,32,1320,64,1380,80l60,16v96h-60
-              c-60,0-180,0-300,0s-240,0-360,0s-240,0-360,0s-240,0-300,0H0V128z" />
-        </svg>
-    </div>
+    <svg class="sliderHero__wave" viewBox="0 0 1440 64.3"><path d="M.59,46.13l60-14.06c60-14.06,162-24.11,282-21.78,120,2.5,250,49,370,53.8s254-36.13,376.15-38c119.41-10.81,351.91,48.14,351.91,48.14H.59Z" transform="translate(-0.59 -9.95)"/></svg>
 </section>

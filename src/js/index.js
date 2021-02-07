@@ -25,11 +25,70 @@ gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear, Back);
 import Swiper from "swiper";
 
 
+//////////////////////////
+// General functions
+//////////////////////////
+
+// Media query
+function getViewport() {
+  let windowWidth = window.innerWidth;
+  let direction = window.innerWidth < 768 ? true : false;
+  return direction;
+}
+
 
 //////////////////////////
 // CLASS BLOCKS
 //////////////////////////
 
+// Lazy load
+class LazyLoad {
+  constructor() {
+    this.lazyBg = document.querySelectorAll('.js-lazy-bg');
+    this.lazyImages = document.querySelectorAll('.js-lazy-image');
+
+    this.start();
+  }
+  start() {
+
+    if (this.lazyImages.length > 0) {
+      const images = Array.from(this.lazyImages);
+
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const image = entry.target;
+                image.src = image.dataset.src;
+                image.onload = () => image.previousElementSibling.remove();
+                imageObserver.unobserve(image);
+            }
+        });
+      });
+
+      images.forEach(img => imageObserver.observe(img));
+    }
+
+    if (this.lazyBg.length > 0) {
+      const bgs = Array.from(this.lazyBg);
+
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bg = entry.target;
+                const image = document.createElement('img'); 
+                image.src = bg.dataset.src;
+                image.onload = () => bg.classList.add('loaded');
+                imageObserver.unobserve(bg);
+            }
+        });
+      });
+
+      bgs.forEach(bg => imageObserver.observe(bg));
+    }
+
+
+  }
+}
 
 // Header
 class Header {
@@ -269,6 +328,7 @@ class Sliders {
 
         let config = {
           init: false,
+          lazy: true,
           // Optional parameters
           loop: true,
           // Navigation arrows
@@ -288,17 +348,39 @@ class Sliders {
           arrow_next.style.display = 'none';
         };
         
-        var headerSwiper = new Swiper(this.headerSlide, config);
+        const headerSwiper = new Swiper(this.headerSlide, config);
 
-        headerSwiper.on('init', e => {
+        headerSwiper.on('init', () => {
           const content = headerSwiper.slides[headerSwiper.activeIndex].querySelectorAll('.js-header-slide-anim');
-          gsap.to(content, .5,{
-            delay:.5,
-            opacity:1,
-            y: 0,
-            ease: Back.easeOut.config(4),
-            stagger: .1
-          });
+          if (content) {
+            gsap.to(content, .5,{
+              delay:.5,
+              opacity:1,
+              y: 0,
+              ease: Back.easeOut.config(4),
+              stagger: .1
+            });
+          }
+
+        });
+        headerSwiper.on('slideChange', () => {
+          const prevSlide = headerSwiper.slides[headerSwiper.previousIndex] ? headerSwiper.slides[headerSwiper.previousIndex].querySelectorAll('.js-header-slide-anim') : null;
+          const content = headerSwiper.slides[headerSwiper.activeIndex] ? headerSwiper.slides[headerSwiper.activeIndex].querySelectorAll('.js-header-slide-anim') : null;
+
+          if (prevSlide) {
+            gsap.to(prevSlide, 0,{
+              clearProps:"all",
+            });
+          }
+          if (content) {
+            gsap.to(content, .5,{
+              delay:.5,
+              opacity:1,
+              y: 0,
+              ease: Back.easeOut.config(4),
+              stagger: .1
+            });
+          }
 
         });
 
@@ -461,7 +543,6 @@ class ProductTabs {
   }
 }
 
-
 // Accordion
 class Accordion {
   constructor() {
@@ -495,14 +576,65 @@ class Accordion {
   }
 }
 
+// Animations
+class Animations {
+  constructor() {
+    this.fadeInStagger = document.querySelectorAll('.js-anim-fadeIn-stagger');
+    this.start();
+  }
+
+  start() {
+
+    if (this.fadeInStagger.length > 0) {
+      
+      let options = {
+        threshold: .3,
+      };
+      if (getViewport()) {
+        options.threshold = .05;
+      }
+
+      for (let i = 0; i < this.fadeInStagger.length; i++) {
+        const container = this.fadeInStagger[i];
+        const items = container.querySelectorAll('.js-anim-fadeIn-stagger-item')
+        let shown = false;
+
+        const scrollObserver = (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio > 0 && !shown) {
+              shown = true;
+              gsap.to(items, .5,{
+                delay:.1,
+                opacity:1,
+                y: 0,
+                ease: Back.easeOut.config(4),
+                stagger: .2
+              });
+            }
+          });
+        };
+
+        let observer = new IntersectionObserver(scrollObserver, options);
+        observer.observe(container);
+
+      }
+
+    }
+
+  }
+}
+
+
 ////////////////////
 // Run apps
 ////////////////////
 document.addEventListener('DOMContentLoaded', function () {
+  var lazy = new LazyLoad();
   var header = new Header();
   var slide = new Sliders();
   var product = new ProductTabs();
   var accordion = new Accordion();
+  var animations = new Animations();
 });
 
 ////////////////////

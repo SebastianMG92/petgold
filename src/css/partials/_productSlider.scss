@@ -17,7 +17,7 @@
     align-self: center;
     padding: 0 30px;
     @include breakpoint(xl) {
-        max-width: 600px;
+        max-width: 700px;
         margin: 0 auto;
     }
     @include breakpoint(xxl) {
@@ -101,11 +101,9 @@
 }
 
 .productSlider__product {
-    border-radius: 40px;
-    border: 1px solid $gray-2;
-    padding: 30px 10px;
     max-width: 300px;
     margin: 0 auto;
+    height: 100%;
 }
 
 .productSlider__product--img {
@@ -156,6 +154,12 @@
 .productSlider__swiper--slide {
     max-width: 95%;
     margin: 0 auto;
+    .swiper-slide {
+        height: auto;
+        padding: 30px 0;
+        border-radius: 40px;
+        border: 1px solid $gray-2;    
+    }
 }
 
 .js-product-slide-next, .js-product-slide-prev {

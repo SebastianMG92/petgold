@@ -6,7 +6,7 @@ module.exports = {
   entry: ['./src/js/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/petgold/wp-content/themes/petgold/dist/',
+    publicPath: '/wp-content/themes/petgold/dist/',
     // publicPath: '/dist/',
     filename: 'bundle.js',
     chunkFilename: '[id][hash].js'
@@ -74,7 +74,7 @@ module.exports = {
     new MiniCssExtractPlugin({
         filename: "bundle.css",
         chunkFilename: '[id][hash].css',
-        publicPath: '/petgold/wp-content/themes/petgold/dist/',
+        publicPath: '/wp-content/themes/petgold/dist/',
         // publicPath: '/dist/',
     })
   ],
