@@ -91,7 +91,8 @@ $autoplay = get_field('autoplay') ?: '';
                             <div class="swiper-slide">
                                 <div class="blogLates__item">
                                     <a href="<?php echo $permalink; ?>" class="blogLates__item--image">
-                                        <img src="<?php echo get_the_post_thumbnail_url($post->ID);?>" alt="<?php echo $alt; ?>">
+                                        <img class="swiper-lazy" data-src="<?php echo get_the_post_thumbnail_url($post->ID);?>" alt="<?php echo $alt; ?>">
+                                        <div class="swiper-lazy-preloader"></div>
                                         <div class="blogLates__item--date">
 
                                             <span class="date"><?php echo get_the_date( "j", $post->ID); ?></span>

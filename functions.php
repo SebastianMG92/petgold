@@ -143,9 +143,10 @@ add_action( 'widgets_init', 'petgold_widgets_init' );
 function petgold_scripts() {
 	wp_enqueue_style( 'petgold-style', get_stylesheet_uri(), array(), _S_VERSION );
 	wp_style_add_data( 'petgold-style', 'rtl', 'replace' );
-	wp_enqueue_script( 'petgold-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 	wp_enqueue_style( 'petgold-style-main', get_template_directory_uri() . '/dist/bundle.css', '',  _S_VERSION);
-	
+
+	// wp_enqueue_script( 'petgold-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+	wp_enqueue_script('petgold-ajax-js', get_bloginfo('stylesheet_directory') . '/js/ajax-add-to-cart.js', array('jquery'),'1.0' );
 	wp_enqueue_script( 'petgold-js-main', get_template_directory_uri() . '/dist/bundle.js', array(), _S_VERSION, true );
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -247,3 +248,161 @@ function woocommerce_support () {
 add_action ('after_setup_theme', 'woocommerce_support');
 
 remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0);
+
+// Add to cart button for external
+
+function add_to_cart_form_shortcode( $atts ) {
+	if ( empty( $atts ) ) {
+		return '';
+	}
+
+	if ( ! isset( $atts['id'] ) && ! isset( $atts['sku'] ) ) {
+		return '';
+	}
+
+	$args = array(
+		'posts_per_page'      => 1,
+		'post_type'           => 'product',
+		'post_status'         => 'publish',
+		'ignore_sticky_posts' => 1,
+		'no_found_rows'       => 1,
+	);
+
+	if ( isset( $atts['sku'] ) ) {
+		$args['meta_query'][] = array(
+			'key'     => '_sku',
+			'value'   => sanitize_text_field( $atts['sku'] ),
+			'compare' => '=',
+		);
+
+		$args['post_type'] = array( 'product', 'product_variation' );
+	}
+
+	if ( isset( $atts['id'] ) ) {
+		$args['p'] = absint( $atts['id'] );
+	}
+
+	$single_product = new WP_Query( $args );
+
+	$preselected_id = '0';
+
+
+	if ( isset( $atts['sku'] ) && $single_product->have_posts() && 'product_variation' === $single_product->post->post_type ) {
+
+		$variation = new WC_Product_Variation( $single_product->post->ID );
+		$attributes = $variation->get_attributes();
+
+		$preselected_id = $single_product->post->ID;
+
+
+		$args = array(
+			'posts_per_page'      => 1,
+			'post_type'           => 'product',
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => 1,
+			'no_found_rows'       => 1,
+			'p'                   => $single_product->post->post_parent,
+		);
+
+		$single_product = new WP_Query( $args );
+	?>
+		<script type="text/javascript">
+			jQuery( document ).ready( function( $ ) {
+				var $variations_form = $( '[data-product-page-preselected-id="<?php echo esc_attr( $preselected_id ); ?>"]' ).find( 'form.variations_form' );
+				<?php foreach ( $attributes as $attr => $value ) { ?>
+					$variations_form.find( 'select[name="<?php echo esc_attr( $attr ); ?>"]' ).val( '<?php echo esc_js( $value ); ?>' );
+				<?php } ?>
+			});
+		</script>
+	<?php
+	}
+
+	$single_product->is_single = true;
+	ob_start();
+	global $wp_query;
+
+	$previous_wp_query = $wp_query;
+
+	$wp_query          = $single_product;
+
+	wp_enqueue_script( 'wc-single-product' );
+	while ( $single_product->have_posts() ) {
+		$single_product->the_post()
+		?>
+		<div class="single-product" data-product-page-preselected-id="<?php echo esc_attr( $preselected_id ); ?>">
+			<?php woocommerce_template_single_add_to_cart(); ?>
+		</div>
+		<?php
+	}
+
+	$wp_query = $previous_wp_query;
+
+	wp_reset_postdata();
+	return '<div class="woocommerce">' . ob_get_clean() . '</div>';
+}
+add_shortcode( 'add_to_cart_form', 'add_to_cart_form_shortcode' );
+
+
+
+// Add ajax add to cart
+add_action('wp_ajax_woocommerce_ajax_add_to_cart', 'woocommerce_ajax_add_to_cart');
+add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', 'woocommerce_ajax_add_to_cart');
+        
+function woocommerce_ajax_add_to_cart() {
+
+	$product_id = apply_filters('woocommerce_add_to_cart_product_id', absint($_POST['product_id']));
+	$quantity = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+	$variation_id = absint($_POST['variation_id']);
+	$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity);
+	$product_status = get_post_status($product_id);
+
+	if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id) && 'publish' === $product_status) {
+
+		do_action('woocommerce_ajax_added_to_cart', $product_id);
+
+		if ('yes' === get_option('woocommerce_cart_redirect_after_add')) {
+			wc_add_to_cart_message(array($product_id => $quantity), true);
+		}
+
+		WC_AJAX :: get_refreshed_fragments();
+	} else {
+
+		$data = array(
+			'error' => true,
+			'product_url' => apply_filters('woocommerce_cart_redirect_after_error', get_permalink($product_id), $product_id));
+
+		echo wp_send_json($data);
+	}
+
+	wp_die();
+}
+
+
+
+//Hide Price Range for WooCommerce Variable Products
+add_filter( 'woocommerce_variable_sale_price_html', 
+'lw_variable_product_price', 10, 2 );
+add_filter( 'woocommerce_variable_price_html', 
+'lw_variable_product_price', 10, 2 );
+
+function lw_variable_product_price( $v_price, $v_product ) {
+
+// Product Price
+$prod_prices = array( $v_product->get_variation_price( 'min', true ), 
+                            $v_product->get_variation_price( 'max', true ) );
+$prod_price = $prod_prices[0]!==$prod_prices[1] ? sprintf(__('From: %1$s', 'woocommerce'), 
+                       wc_price( $prod_prices[0] ) ) : wc_price( $prod_prices[0] );
+
+// Regular Price
+$regular_prices = array( $v_product->get_variation_regular_price( 'min', true ), 
+                          $v_product->get_variation_regular_price( 'max', true ) );
+sort( $regular_prices );
+$regular_price = $regular_prices[0]!==$regular_prices[1] ? sprintf(__('From: %1$s','woocommerce')
+                      , wc_price( $regular_prices[0] ) ) : wc_price( $regular_prices[0] );
+
+if ( $prod_price !== $regular_price ) {
+$prod_price = '<del>'.$regular_price.$v_product->get_price_suffix() . '</del> <ins>' . 
+                       $prod_price . $v_product->get_price_suffix() . '</ins>';
+}
+return $prod_price;
+}

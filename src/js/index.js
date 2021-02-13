@@ -18,8 +18,8 @@ import '../css/style.sass';
 
 // GSAP
 import gsap from "gsap";
-import { TweenMax, TimelineMax, Power2, Linear, Back} from "gsap/all";
-gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear, Back);
+import { TweenMax, TimelineMax, Power2, Linear, Back, ScrollTrigger} from "gsap/all";
+gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear, Back, ScrollTrigger);
 
 //swiper
 import Swiper from "swiper";
@@ -53,7 +53,9 @@ class LazyLoad {
 
     if (this.lazyImages.length > 0) {
       const images = Array.from(this.lazyImages);
-
+      let config = {
+        rootMargin: '0px 0px 500px 0px',
+      }
       const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -63,9 +65,11 @@ class LazyLoad {
                 imageObserver.unobserve(image);
             }
         });
-      });
+      }, config);
 
-      images.forEach(img => imageObserver.observe(img));
+      images.forEach(img => {
+        imageObserver.observe(img)
+      });
     }
 
     if (this.lazyBg.length > 0) {
@@ -408,10 +412,13 @@ class Sliders {
 
         var headerSwiper = new Swiper(slide, {
           // Optional parameters
+          slidesPerView: 1,
+          spaceBetween: 10,
           loop: true,
           lazy: true,
           observer: true,
           observeParents: true,
+          threshold: 20,
           // If we need pagination
           pagination: {
             el: `.js-product-slide-pagination-${i}`,
@@ -453,6 +460,7 @@ class Sliders {
         let config = {
           slidesPerView: 1,
           spaceBetween: 10,
+          lazy: true,
           pagination: {
             el: `.js-slide-large-pagination-${i}`,
           },
@@ -580,6 +588,8 @@ class Accordion {
 class Animations {
   constructor() {
     this.fadeInStagger = document.querySelectorAll('.js-anim-fadeIn-stagger');
+    this.parallaxElements = document.querySelectorAll('.js-anim-parallax');
+    this.footerAnimation = document.querySelectorAll('.js-anim-footer');
     this.start();
   }
 
@@ -616,6 +626,54 @@ class Animations {
 
         let observer = new IntersectionObserver(scrollObserver, options);
         observer.observe(container);
+
+      }
+
+    }
+
+    if (this.parallaxElements.length > 0) {
+      
+      for (let i = 0; i < this.parallaxElements.length; i++) {
+        const container = this.parallaxElements[i];
+        const items = container.querySelectorAll('.js-anim-parallax-item')
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          }
+        });
+
+        gsap.utils.toArray(items).forEach(item => {
+          const depth = item.dataset.depth;
+          const movement = -(container.offsetHeight * depth);
+          tl.to(item, {y:movement,ease: "none"}, 0);
+        });
+
+      }
+
+    }
+
+    if (this.footerAnimation.length > 0) {
+      
+      for (let i = 0; i < this.footerAnimation.length; i++) {
+        const container = this.footerAnimation[i];
+        const item = container.querySelectorAll('.js-anim-footer-item');
+        
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: "top bottom",
+            end: "bottom bottom",
+            scrub: 1,
+          }
+        });
+
+        tl.to(item, {top: 0,ease: "none"}, .3);
+
+
 
       }
 

@@ -1,4 +1,5 @@
 .productSlider {
+    position: relative;
     overflow: hidden;
     &.right {
         .row {
@@ -8,9 +9,17 @@
 }
 
 .productSlider__bg {
+    position: relative;
     padding: 0;
     align-self: center;
     margin: 0 0 30px;
+    @include breakpoint(md) {
+        margin: 0;
+    }
+}
+
+.productSlider__bg--img {
+    position: relative;
 }
 
 .productSlider__content {
@@ -104,14 +113,20 @@
     max-width: 300px;
     margin: 0 auto;
     height: 100%;
+    border-radius: 40px;
+    border: 1px solid $gray-2;    
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .productSlider__product--img {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 135px;
+    height: 135px;
     overflow: hidden;
-    margin: 0 auto 20px;
+    margin: 20px auto 5px;
     img {
         height: 100%;
         object-fit: contain;
@@ -125,6 +140,7 @@
 
 .productSlider__product--content {
     text-align: center;
+    margin: 0 auto ;
     .category {
         display: block;
         font-weight: 700;
@@ -139,11 +155,15 @@
         }
     }
     .heading {
-        font-size: 22px;
-        margin: 0 0 10px;
+        font-size: 18px;
+        margin: 0 0 8px;
     }
     .price {
-        margin: 0 0 10px;
+        margin: 0;
+        font-size: 14px;
+    }
+    .category {
+        margin: 0 0 5px;
     }
 }
 
@@ -152,15 +172,116 @@
 }
 
 .productSlider__swiper--slide {
-    max-width: 95%;
+    max-width: 100%;
     margin: 0 auto;
     .swiper-slide {
         height: auto;
-        padding: 30px 0;
-        border-radius: 40px;
-        border: 1px solid $gray-2;    
+        // padding: 30px 0;
     }
 }
+
+.productSlider__product--link {
+    display: block;
+    text-decoration: none;
+    color: $black;
+    * {
+        color: $black;
+    }
+}
+
+.productSlider__product--cart {
+    margin: 0 0 25px;
+    .woocommerce-variation-add-to-cart {
+        display: flex;
+    }
+    .cart {
+        display: flex;
+    }
+    .variations_form.cart {
+        display: block;
+    }
+    .quantity {
+        flex-shrink: 1;
+    }
+    .single_add_to_cart_button {
+        flex-grow: 1;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        border: 0;
+        padding: 9px 12px;
+        line-height: 1;
+        text-decoration: none;
+        transition: .3s ease-out;
+        border-radius: 0 20px 20px 0;
+        background-color: $purple;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: .3s ease;
+        &:hover, &:focus {
+            background-color: $purple-2;
+        }
+    }
+    .added_to_cart {
+        display: none;
+    }
+    input[type="number"] {
+        display: inline-block;
+        width: 100%;
+        max-width: 35px;
+        padding: 5px;
+        border-radius: 20px 0 0 20px;
+        font-size: 14px;
+        &::placeholder {
+            font-size: 14px;
+        }
+    }
+    .variations {
+        margin: 0 0 3px;
+        .label {
+            display: none !important;
+        }
+    }
+    .woocommerce-Price-amount.amount {
+        display: none !important;
+    }
+    .reset_variations {
+        display: none !important;
+    }
+    .variable-item-span.variable-item-span-button {
+        font-size: 12px !important;
+    }
+    .variable-item.button-variable-item {
+        margin: 0 5px 5px 0 !important;
+    }
+}
+
+
+.productSlider__bg--dec {
+    display: block;
+    position: absolute;
+    width: 50px;
+    height:50px;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    user-select: none;
+    &:nth-child(3n + 1){
+        top: 6px;
+        left: 78px;
+    }
+    &:nth-child(3n + 2){
+        top: 400px;
+        left: 228px;
+    }
+    &:nth-child(3n + 3){
+        top: 90px;
+        left: 510px;
+        transform: rotate(15deg);
+    }
+}
+
 
 .js-product-slide-next, .js-product-slide-prev {
     top: calc(50% + 40px);
@@ -172,11 +293,11 @@
 }
 
 .js-product-slide-next {
-    right: -20px;
+    right: -30px;
 }
 
 .js-product-slide-prev {
-    left: -20px;
+    left: -30px;
 }
 
 .js-product-slide-pagination {

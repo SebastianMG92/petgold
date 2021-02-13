@@ -13,7 +13,7 @@
 
 
 	<!-- footer -->    
-	<footer class="footer">
+	<footer class="footer js-anim-footer">
       <div class="container">
         <div class="row">
           <div class="col-12 col-md-3 footer__logo">
@@ -187,7 +187,7 @@
       </div>
   
 
-      <div class="footer__imgTop">
+      <div class="footer__imgTop js-anim-footer-item">
 	  	<?php if ( get_field('imagen_superior', 'options') ) : $image = get_field('imagen_superior', 'options'); ?>
 			<img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" srcset="">
 		<?php endif; ?>

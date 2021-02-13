@@ -147,6 +147,7 @@ p.text, .text p, .text
     svg
         width: 20px
         margin: 0 0 0 10px
+        transition: .3s ease
     &.btn-white
         color: white
         svg
@@ -155,6 +156,9 @@ p.text, .text p, .text
         color: $purple
         svg
             fill: $purple
+    &:hover, &:focus
+        svg
+            transform: translateX(5px)
 
 .btn-radio
     position: relative
@@ -166,9 +170,12 @@ p.text, .text p, .text
     text-decoration: none
     transition: .3s ease-out
     border-radius: 20px
+    transition: .3s ease
     &.btn-purple
         background-color: $purple
         color: white
+        &:hover, &:focus
+            background-color: $purple-2
 
 /////////////////
 //paddings

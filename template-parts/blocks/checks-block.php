@@ -10,7 +10,7 @@
  */
 
 // Create id attribute allowing for custom "anchor" value.
-$id = 'che_' . $block['id'];
+$id = 'checks_' . $block['id'];
 if (!empty($block['anchor'])) {
     $id = $block['anchor'];
 }
@@ -79,7 +79,7 @@ $layout = get_field('tipo_de_layout') ?: '';
                 $image = get_field('imagen') ?: '';
             ?>
                 <?php if( have_rows('checks_left') ): ?>
-                    <div class="col-12 col-lg-3 services__column">
+                    <div class="col-12 col-lg-3 services__column js-anim-fadeIn-stagger">
                         <?php while( have_rows('checks_left') ): the_row(); 
                             $heading = get_sub_field('titulo');
                             $content_check = get_sub_field('contenido');
@@ -88,14 +88,7 @@ $layout = get_field('tipo_de_layout') ?: '';
                             $link_url = get_sub_field('link')["url"];
                             $link_target = get_sub_field('link')["target"];
                         ?>
-                            <?php
-                            /*
-                                echo '<pre>';
-                                var_dump($image);
-                                echo '</pre>';
-                            */
-                            ?>
-                                <a href="<?php echo $link_url; ?>" class="services__column--item">
+                                <a href="<?php echo $link_url; ?>" class="services__column--item js-anim-fadeIn-stagger-item">
                                     <div class="check-icon" style="background-color: <?php echo $color; ?>;">
                                         <svg viewBox="0 0 426.667 426.667">
                                             <path d="M421.876,56.307c-6.548-6.78-17.352-6.968-24.132-0.42c-0.142,0.137-0.282,0.277-0.42,0.42L119.257,334.375
@@ -117,12 +110,12 @@ $layout = get_field('tipo_de_layout') ?: '';
 
                 <div class="col-12 col-lg-6 services__image">
                     <figure>
-                        <img src="<?php echo $image["url"]; ?>" alt="<?php echo $image["alt"]; ?>">
+                        <img class="js-lazy-image" data-src="<?php echo $image["url"]; ?>" alt="<?php echo $image["alt"]; ?>">
                     </figure>
                 </div>
                 
                 <?php if( have_rows('checks_right') ): ?>
-                    <div class="col-12 col-lg-3 services__column">
+                    <div class="col-12 col-lg-3 services__column js-anim-fadeIn-stagger">
                         <?php while( have_rows('checks_right') ): the_row(); 
                             $heading = get_sub_field('titulo');
                             $content_check = get_sub_field('contenido');
@@ -138,7 +131,7 @@ $layout = get_field('tipo_de_layout') ?: '';
                                 echo '</pre>';
                             */
                             ?>
-                                <a href="<?php echo $link_url; ?>" class="services__column--item" target="<?php echo $link_target; ?>">
+                                <a href="<?php echo $link_url; ?>" class="services__column--item js-anim-fadeIn-stagger-item" target="<?php echo $link_target; ?>">
                                     <div class="check-icon" style="background-color: <?php echo $color; ?>;">
                                         <svg viewBox="0 0 426.667 426.667">
                                             <path d="M421.876,56.307c-6.548-6.78-17.352-6.968-24.132-0.42c-0.142,0.137-0.282,0.277-0.42,0.42L119.257,334.375
