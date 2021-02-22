@@ -62,7 +62,7 @@ $layout = get_field('tipo_de_layout') ?: '';
     <div class="container">
 
         <div class="row">
-            <div class="col-12 services__head">
+            <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 services__head">
                 <h2 class="heading">
                     <?php echo $title; ?>
                 </h2>
@@ -110,6 +110,7 @@ $layout = get_field('tipo_de_layout') ?: '';
 
                 <div class="col-12 col-lg-6 services__image">
                     <figure>
+                        <div class="js-preloader"></div>
                         <img class="js-lazy-image" data-src="<?php echo $image["url"]; ?>" alt="<?php echo $image["alt"]; ?>">
                     </figure>
                 </div>

@@ -1,21 +1,29 @@
 .subHeader {
     position: relative;
-    background-color: #b9eef6;
-    padding-top: 150px;
-    padding-bottom: 100px;
+    // background-color: #b9eef6;
+    padding-top: 140px;
+    padding-bottom: 60px;
     overflow: hidden;
-
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
     @include breakpoint(md) {
-        padding-top: 200px;
-        padding-bottom: 150px;
+        padding-top: 160px;
+        padding-bottom: 80px;
     }
     @include breakpoint(lg) {
-        padding-top: 150px;
-        padding-bottom: 200px;
+        padding-bottom: 100px;
     }
+}
+
+
+.subHeader__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .subHeader__wave {
@@ -23,7 +31,7 @@
     left: 0;
     right: 0;
     z-index: 1;
-    bottom: -4vw;
+    bottom: 0;
     svg {
         display: block;
     }
@@ -34,12 +42,13 @@
 
 
 .subHeader__content {
-    margin-top: 50px;
+    margin-top: 30px;
     .heading {
         font-size: 35px;
         margin: 0 0 10px;
     }
     @include breakpoint(md) {
+        margin-top: 50px;
         .heading {
             font-size: 40px;
         }

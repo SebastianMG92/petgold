@@ -24,6 +24,7 @@ body
             bottom: 0
             z-index: 700
             background-color: rgba(0, 0, 0, .7)
+
 a
     transition: .3s ease
     display: inline-block
@@ -189,8 +190,14 @@ p.text, .text p, .text
 
 
 ////////////////////////
-// Helpers
+// Aditional css
 ///////////////////////
+
+.container, .container-lg, .container-md, .container-sm, .container-xl
+    @include breakpoint(xxl)
+        max-width: 1380px
+
+
 
 .text-center
     text-align: center
@@ -225,10 +232,10 @@ p.text, .text p, .text
     background-color: #F5F5F5
 
 ::-webkit-scrollbar
-    width: 6px
+    width: 3px
     background-color: #F5F5F5
-
+ 
 ::-webkit-scrollbar-thumb
     border-radius: 10px
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3)
-    background-color: $black
+    background-color: $green

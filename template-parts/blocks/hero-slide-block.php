@@ -10,7 +10,7 @@
  */
 
 // Create id attribute allowing for custom "anchor" value.
-$id = 'hero_slide_' . $block['id'];
+$id = 'hero_' . $block['id'];
 if (!empty($block['anchor'])) {
     $id = $block['anchor'];
 }

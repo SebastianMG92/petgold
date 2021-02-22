@@ -6,6 +6,7 @@
     @include breakpoint(md) {
         display: flex;
         flex-wrap: wrap;
+        align-items: flex-start;
     }
 }
 
@@ -30,6 +31,7 @@
     width: 100%;
     padding: 0;
     font-weight: bold;
+    cursor: pointer;
     &::after {
         content: '\002B';
         position: absolute;

@@ -16,6 +16,9 @@ import '../css/style.sass';
 // IMPORT LIBRARIES JS
 //////////////////////////
 
+// Fuse js
+import Fuse from 'fuse.js'
+
 // GSAP
 import gsap from "gsap";
 import { TweenMax, TimelineMax, Power2, Linear, Back, ScrollTrigger} from "gsap/all";
@@ -24,6 +27,8 @@ gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear, Back, ScrollTrigger);
 //swiper
 import Swiper from "swiper";
 
+// Woocommerce
+import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 
 //////////////////////////
 // General functions
@@ -36,6 +41,18 @@ function getViewport() {
   return direction;
 }
 
+// Check if an element exists in array using a comparer function
+Array.prototype.inArray = function(comparer) { 
+  for(var i=0; i < this.length; i++) { 
+      if(comparer(this[i])) return true; 
+  }
+  return false; 
+}
+Array.prototype.pushIfNotExist = function(element, comparer) { 
+  if (!this.inArray(comparer)) {
+      this.push(element);
+  }
+}
 
 //////////////////////////
 // CLASS BLOCKS
@@ -120,10 +137,10 @@ class Header {
         ".header__nav > .menu-item"
       );
       this.subMenuContainer = this.headerContainer.querySelectorAll(
-        ".header__nav > .menu-item-has-children"
+        ".header__desktopMenu > .menu-item-has-children"
       );
       this.subMenuContainerL2 = this.headerContainer.querySelectorAll(
-        ".header__nav > .menu-item-has-children"
+        ".header__desktopMenu > .menu-item-has-children .menu-item-has-children"
       );
       // Sticky menu
       this.stickyTransparent();
@@ -138,23 +155,14 @@ class Header {
 
       // Listeners
       this.menuButton.addEventListener('click', this.toggleMenu);
-      // this.closeAcc.addEventListener('click', this.toggleMenu)
-      for (let i = 0; i < this.subMenuContainer.length; i++) {
-        const item = this.subMenuContainer[i];
-        item.addEventListener('mouseenter', (e) => this.subMenuToggle(e));
-        item.addEventListener('mouseleave', (e) => this.subMenuToggle(e));
-      }
-      for (let index = 0; index < this.subMenuContainerL2.length; index++) {
-        const item = this.subMenuContainerL2[index];
-        item.addEventListener('click', (e) => this.subMenuToggle(e));
-      }
+      // this.closeAcc.addEventListener('click', this.toggleMenu);
 
       // Submenus init
       if (this.subMenuContainer.length > 0) {
-        this.subMenuToggle(this.subMenuContainer);
+        this.subMenuToggle(this.subMenuContainer, "level-1");
       }
       if (this.subMenuContainerL2.length > 0) {
-        // this.subMenuToggle(this.subMenuContainerL2);
+        this.subMenuToggle(this.subMenuContainerL2, "level-2");
       }
 
       // Search bar function
@@ -166,12 +174,9 @@ class Header {
           if (!this.searchButton.classList.contains('active')) {
             this.searchButton.classList.add('active');
             panel.style.maxHeight = panel.scrollHeight + 'px';
-            // this.searchButton.nextElementSibling.style.display = 'block';
           } else {
             this.searchButton.classList.remove('active');
             panel.style.maxHeight = null;
-
-            // this.searchButton.nextElementSibling.style.display = 'none';
           }
         });
 
@@ -240,40 +245,40 @@ class Header {
       }, 400);
     }
   }
-  subMenuToggle(submenus) {
+  subMenuToggle(submenus, level) {
     for (let i = 0; i < submenus.length; i++) {
-
       const submenu = submenus[i];
-      
-        // Click event
-      // submenu.addEventListener('click', (e) => {
-      //     const submenuChild = e.target.querySelector('.sub-menu');
-      //     if (submenuChild.style.maxHeight) {
-      //         e.target.classList.remove('open');
-      //         submenuChild.style.maxHeight = null
-      //     } else {
-      //         e.target.classList.add('open');
-      //         submenuChild.style.maxHeight = submenuChild.scrollHeight + "px"
-      //     }
-      // });
-
       // Hover event
       submenu.addEventListener('mouseenter', (e) => {
           const submenuChild = e.target.querySelector('.sub-menu');
+          const parent = level === "level-2" ? e.target.parentElement : null;
           e.target.classList.add('open');
           submenuChild.style.maxHeight = submenuChild.scrollHeight + "px"
-      })
+
+          if (parent) {
+            parent.style.maxHeight = parent.scrollHeight + submenuChild.scrollHeight + "px";
+          }
+      });
       submenu.addEventListener('mouseleave', (e) => {
           const submenuChild = e.target.querySelector('.sub-menu');
+          const parent = level === "level-2" ? e.target.parentElement : null;
           e.target.classList.remove('open');
-          submenuChild.style.maxHeight = null
-      });
+          submenuChild.style.maxHeight = null;
 
+          if (parent) {
+            parent.style.maxHeight = parent.scrollHeight + submenuChild.scrollHeight + "px";
+          }
+      });
       // Focus event
       submenu.addEventListener('focus', (e) => {
           const submenuChild = e.target.querySelector('.sub-menu');
+          const parent = level === "level-2" ? e.target.parentElement : null;
           e.target.classList.add('open');
-          submenuChild.style.maxHeight = submenuChild.scrollHeight + "px"
+          submenuChild.style.maxHeight = submenuChild.scrollHeight + "px";
+
+          if (parent) {
+            parent.style.maxHeight = parent.scrollHeight + submenuChild.scrollHeight + "px";
+          }
       });
     }
   }
@@ -305,6 +310,240 @@ class Header {
         link.tabIndex = -1
       }
     }
+  }
+}
+
+// Woocommerce
+class Woocommerce {
+  constructor() {
+    // Shop page
+    this.wooShop = document.querySelector('.js-woo-product-page');
+    this.start();
+  }
+  start() {
+
+    this.api = new WooCommerceRestApi({
+      url: window.location.origin,
+      consumerKey: "ck_13097343a23c2565069b3bc2bd38acceca143ab7",
+      consumerSecret: "cs_55294a0f6482a89889ec4f1fe3a34731f8da754b",
+      version: "wc/v3",
+    });
+
+    // If shop page
+    if (this.wooShop) {
+      this.shopPage(this.wooShop);
+    }
+  }
+  getProducts(endpoint, config) {
+    // List products
+    return this.api.get(endpoint, config)
+      .then((response) => {
+        // Successful request
+        return response.data;
+        // console.log("Response Data:", response.data);
+        // console.log("Total of pages:", response.headers['x-wp-totalpages']);
+        // console.log("Total of items:", response.headers['x-wp-total']);
+      })
+      .catch((error) => {
+        // Invalid request, for 4xx and 5xx statuses
+        console.log("Response Status:", error.response.status);
+        console.log("Response Headers:", error.response.headers);
+        console.log("Response Data:", error.response.data);
+      })
+      .finally(() => {
+        // Always executed.
+      });
+  };
+  getOutput(product) {
+      // Price html output
+      const priceOutput = (product) => {
+        let output;
+        if (product.type === 'simple') {
+          output = `
+            <div class="price">
+              ${product.on_sale ? 
+                `<span class="normal_price">$${product.regular_price}</span> - <span class="sale_price">$${product.sale_price}</span>`
+                :
+                `<span class="regular_price">$${product.regular_price}</span>`
+              }
+            </div>
+          `
+        } else {
+          output = `
+            ${product.product_variations.map((variation, index) => 
+              variation.on_sale ? 
+              `<div class="dynamic_price ${index === 0 ? `active` : ``}" data-id="${variation.id}">
+                <span class="normal_price">$${variation.regular_price}</span> - <span class="sale_price">$${variation.sale_price}</span>
+              </div>` 
+              : 
+              `<div class="dynamic_price ${index === 0 ? `active` : ``}" data-id="${variation.id}">
+                <span class="regular_price">$${variation.regular_price}</span>
+              </div>`
+            ).join('')}
+          `
+        }
+        return output;
+      };
+      // Variation html output
+      const variationOutput = (product) => {
+        let output;
+        if (product.type === 'simple') {
+          output = `
+          <form class="woocommerce cart" action="${product.permalink}">
+            <div class="woocommerce__add_to_cart">
+              <input type="number" min="1" name="quantity" value="1" title="Cantidad" inputmode="numeric">
+              <button name="add-to-cart" type="submit" value="${product.id}" class="single_add_to_cart_button button alt">Añadir al carrito</button>
+            </div>
+          </form>
+          `;
+        } else {
+          const valid_variations = product.product_variations;
+
+          // Create an object with variations
+          const list_variations = {};
+          for (let i = 0; i < valid_variations.length; i++) {
+            const group = valid_variations[i].attributes;
+            for (let i = 0; i < group.length; i++) {
+              const item = group[i];
+              if (!list_variations[item.slug]) {
+                list_variations[item.slug] = []
+              }
+              if (list_variations[item.slug]) {
+                list_variations[item.slug].pushIfNotExist(item.title, function(e) { 
+                  return e === item.title;
+                });
+              }
+            }
+          };
+          
+          output = `
+          <form class="woocommerce cart" action="${product.permalink}" data-product-variations='${JSON.stringify(valid_variations)}'>
+            <div class="variables">
+              ${
+                Object.entries(list_variations).map(group => `
+                  <div class="variable">
+                    <div class="variable__options">
+                      ${group[1].map((opt, index) => `
+                        <label>
+                          <input type="radio" value="${opt}" name="${group[0]}" ${index === 0 ? 'checked' : ''}>
+                          ${opt}
+                        </label>
+                      `).join('')}
+                    </div>
+                  </div>
+                `).join('')
+              }
+            </div>
+            <div class="woocommerce__add_to_cart">
+              <input type="number" min="1" name="quantity" value="1" title="Cantidad" inputmode="numeric">
+              <button type="submit" class="single_add_to_cart_button button alt disabled wc-variation-selection-needed">Añadir al carrito</button>
+              <input type="hidden" name="product_id" value="${product.id}">
+              <input type="hidden" name="variation_id" class="variation_id" value="0">
+            </div>
+          </form>
+          `;
+        }
+        return output;
+      };
+      return `
+        <div class="productSlider__product ${product.type === 'variable' ? `js-product-variations` : ''}">
+          <div>
+            <a class="productSlider__product--link" href="${product.permalink}">
+                <figure class="productSlider__product--img">
+                    <img class="" alt="${product.images[0].alt}" src="${product.images[0].src}">
+                </figure>
+            </a>
+            <div class="productSlider__product--content">
+                <span class="category">
+                  ${product.categories ? product.categories.map(cat => cat.name) : ''}                                                                 
+                </span>
+                <a href="${product.permalink}" class="productSlider__product--link">
+                    <h3 class="heading">${product.name}</h3>
+                    <p class="price">
+                      ${priceOutput(product)}
+                    </p> 
+                </a>
+            </div>
+          </div>
+
+          <div class="productSlider__product--cart">
+            ${variationOutput(product)}
+          </div>
+        </div>
+      `
+  };
+  variableSystem(products) {
+
+    for (let i = 0; i < products.length; i++) {
+      const product = products[i];
+      const form = product.querySelector('.woocommerce');
+      const variable_checkboxes = form.querySelectorAll('input[type="radio"]');
+      const variable_data = JSON.parse(form.dataset.productVariations);
+      const options = {
+        includeScore: true,
+        keys: ['attributes.option']
+      };
+      const fuse = new Fuse(variable_data, options)
+      let state = {};
+
+      for (let i = 0; i < variable_checkboxes.length; i++) {
+        const checkbox = variable_checkboxes[i];
+        
+        // Add categories of variations
+        if (!state[checkbox.name]) {
+          state[checkbox.name] = [];
+        }
+
+        checkbox.addEventListener('change', e => {
+          e.preventDefault();
+          const category = checkbox.name;
+          if (state[category].length > 0) {
+            state[category] = [];
+          }
+
+          state[category].push(checkbox.value);
+
+          // if (checkbox.checked) {
+          //   state.checked.push(checkbox.value);
+          // } else {
+          //   state.checked = state.checked.filter(item => item !== checkbox.value);
+          // }
+
+
+
+          console.log(state);
+        });
+        
+      }
+      
+      // console.log(state);
+      // console.log(variable_checkboxes);
+      // console.log(variable_data);
+
+    }
+
+  }
+  async shopPage(container) {
+    
+    // Get products
+    let config = {
+      per_page: container.dataset.products ? container.dataset.products : 6,
+      orderby: "popularity",
+      status: "publish",
+      min_price: 1,
+    };
+    const products = await this.getProducts(`products`, config);
+
+    // Building html
+    let output = await products.map( product => this.getOutput(product));
+
+    // Print data
+    let newItem = document.createElement('div');
+    newItem.classList.add('productGrid__container');
+    newItem.innerHTML = output.join('');
+    const variable_elements =  newItem.querySelectorAll('.js-product-variations');
+    variable_elements.length > 0 && this.variableSystem(variable_elements);
+    container.appendChild(newItem);
   }
 }
 
@@ -437,6 +676,10 @@ class Sliders {
             },
             1200: {
               slidesPerView: 3,
+              spaceBetween: 10
+            },
+            1400: {
+              slidesPerView: 4,
               spaceBetween: 10
             }
           }
@@ -589,6 +832,7 @@ class Animations {
   constructor() {
     this.fadeInStagger = document.querySelectorAll('.js-anim-fadeIn-stagger');
     this.parallaxElements = document.querySelectorAll('.js-anim-parallax');
+    this.parallaxBgs = document.querySelectorAll('.js-anim-parallaxBg');
     this.footerAnimation = document.querySelectorAll('.js-anim-footer');
     this.start();
   }
@@ -642,7 +886,7 @@ class Animations {
             trigger: container,
             start: "top bottom",
             end: "bottom top",
-            scrub: 1,
+            scrub: .5,
           }
         });
 
@@ -667,7 +911,7 @@ class Animations {
             trigger: container,
             start: "top bottom",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: .1,
           }
         });
 
@@ -677,6 +921,27 @@ class Animations {
 
       }
 
+    }
+
+    if (this.parallaxBgs.length > 0) {
+     
+      for (let i = 0; i < this.parallaxBgs.length; i++) {
+        const container = this.parallaxBgs[i];
+        const bg = container.querySelector('.js-anim-parallaxBg-item');
+
+        // bg.style.backgroundPosition = `50% 0px`;
+
+        // gsap.to(bg, {
+        //   backgroundPosition: `50% ${-container.offsetHeight}px`,
+        //   ease: "none",
+        //   scrollTrigger: {
+        //     trigger: container,
+        //     scrub: 1
+        //   }
+        // });
+
+      }
+      
     }
 
   }
@@ -689,6 +954,7 @@ class Animations {
 document.addEventListener('DOMContentLoaded', function () {
   var lazy = new LazyLoad();
   var header = new Header();
+  var woocommerce = new Woocommerce();
   var slide = new Sliders();
   var product = new ProductTabs();
   var accordion = new Accordion();

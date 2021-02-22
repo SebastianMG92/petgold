@@ -1,0 +1,18 @@
+.iconsColumns__item {
+    .heading {
+        color: $green;
+        margin: 15px 0;
+        font-size: 20px;
+    }
+    .text * {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+}
+
+.iconsColumns__item--icon {
+    max-width: 80px;
+    img {
+        display: block;
+    }
+}

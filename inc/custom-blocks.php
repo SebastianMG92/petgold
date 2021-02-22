@@ -65,6 +65,66 @@ function custom_blocks() {
             'keywords'          => array( 'slider', 'blog' ),
         ));
 
+        // Grid logos
+        acf_register_block_type(array(
+            'name'              => 'grid-logos-block',
+            'title'             => __('Grid logos'),
+            'description'       => __('Grid logos'),
+            'render_template'   => 'template-parts/blocks/grid-logos-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'logos', 'grid' ),
+        ));
+
+        // Hero block
+        acf_register_block_type(array(
+            'name'              => 'hero-block',
+            'title'             => __('Hero'),
+            'description'       => __('Hero'),
+            'render_template'   => 'template-parts/blocks/hero-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'hero' ),
+        ));
+
+        // Icons columns
+        acf_register_block_type(array(
+            'name'              => 'icons-columns-block',
+            'title'             => __('Icons columns'),
+            'description'       => __('Icons columns'),
+            'render_template'   => 'template-parts/blocks/icons-columns-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'icons' ),
+        ));
+
+        // Tabs block
+        acf_register_block_type(array(
+            'name'              => 'tabs-block',
+            'title'             => __('Tabs'),
+            'description'       => __('Tabs'),
+            'render_template'   => 'template-parts/blocks/tabs-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'tabs' ),
+        ));
+
+        // Text block
+        acf_register_block_type(array(
+            'name'              => 'text-block',
+            'title'             => __('Text'),
+            'description'       => __('Text'),
+            'render_template'   => 'template-parts/blocks/text-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'text' ),
+        ));
+
     }
 }
 

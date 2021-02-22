@@ -20,14 +20,15 @@ defined( 'ABSPATH' ) || exit;
 get_header( 'shop' );
 
 ?>
-
+ 
 
 
 <?php if ( get_field('pagina_de_tienda_imagen', 'options') ) : $image = get_field('pagina_de_tienda_imagen', 'options'); ?>
 <?php endif; ?>
 
-<section class="subHeader" style="background-image: url(<?php echo $image['url']; ?>);">
-
+<section class="subHeader js-anim-parallaxBg">
+	<div class="subHeader__bg js-anim-parallaxBg-item" style="background-image: url(<?php echo $image['url']; ?>);"></div>
+	
 	<div class="container">
 		<div class="row">
 
@@ -54,13 +55,9 @@ get_header( 'shop' );
 			</div>
 		</div>
 	</div>
-
-
+	
 	<div class="subHeader__wave">
-		<svg viewBox="0 0 1440 192">
-		<path d="M0,128l60-32C120,64,240,0,360,5.3C480,11,600,85,720,96s240-43,360-53.3C1200,32,1320,64,1380,80l60,16v96h-60
-			c-60,0-180,0-300,0s-240,0-360,0s-240,0-360,0s-240,0-300,0H0V128z"></path>
-		</svg>
+    	<svg viewBox="0 0 1440 64.3"><path d="M.59,46.13l60-14.06c60-14.06,162-24.11,282-21.78,120,2.5,250,49,370,53.8s254-36.13,376.15-38c119.41-10.81,351.91,48.14,351.91,48.14H.59Z" transform="translate(-0.59 -9.95)"/></svg>
 	</div>
 
 </section>
@@ -68,9 +65,23 @@ get_header( 'shop' );
 
 <section class="productGrid">
 	<div class="container">
-		<div class="row">
-			<div class="col-12 col-lg-9 productGrid__container">
+		<div class="row flex-column-reverse flex-lg-row">
 
+			<div class="col-12 col-lg-3 col-xxl-2">
+				<?php
+					/**
+					 * Hook: woocommerce_sidebar.
+					 *
+					 * @hooked woocommerce_get_sidebar - 10
+					 */
+					do_action( 'woocommerce_sidebar' );
+				?>
+			</div>
+
+			<div class="col-12 col-lg-9 col-xxl-10 js-woo-product-page" data-products="8">
+			</div>
+
+			<div style="display:none;">
 				<?php
 					if ( woocommerce_product_loop() ) {
 
@@ -127,19 +138,8 @@ get_header( 'shop' );
 						}
 					?>
 				</div>
-
 			</div>
 
-			<div class="col-12 col-lg-3">
-				<?php
-					/**
-					 * Hook: woocommerce_sidebar.
-					 *
-					 * @hooked woocommerce_get_sidebar - 10
-					 */
-					do_action( 'woocommerce_sidebar' );
-				?>
-			</div>
 		</div>
 	</div>
 </section>

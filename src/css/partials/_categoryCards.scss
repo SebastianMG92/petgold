@@ -3,9 +3,12 @@
     background-size: contain;
     background-position: right center;
     background-repeat: no-repeat;
-    // background-image: initial !important;
     .col-12 {
         margin-bottom: 50px;
+        text-align: center;
+    }
+    @media only screen and (max-width: 768px) {
+        background-image: initial !important;
     }
 }
 
@@ -34,6 +37,11 @@
         box-shadow: 0 0 10px #9e9e9e;
         .icon {
             transform: rotate(-20deg) scale(.9);
+        }
+        .btn-arrow {
+            svg {
+                transform: translateX(5px);
+            }
         }
     }
     @include breakpoint(lg) {
