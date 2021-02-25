@@ -58,6 +58,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        img {
+            width: 20px;
+            height: 20px;
+            margin: auto;
+            object-fit: cover;
+        }
         svg {
             width: 15px;
             fill: white;

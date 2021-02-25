@@ -1,5 +1,5 @@
 /////// Polyfill
-import './polyfills/polyfill';
+// import './polyfills/polyfill';
 
 //////////////////////////
 // IMPORT CSS

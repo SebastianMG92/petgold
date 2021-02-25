@@ -125,6 +125,42 @@ function custom_blocks() {
             'keywords'          => array( 'text' ),
         ));
 
+        // Image dec text
+        acf_register_block_type(array(
+            'name'              => 'image-text-block',
+            'title'             => __('Image and text'),
+            'description'       => __('Image and text'),
+            'render_template'   => 'template-parts/blocks/image-text-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'text' ),
+        ));
+
+        // Contact
+        acf_register_block_type(array(
+            'name'              => 'contact-block',
+            'title'             => __('Contact'),
+            'description'       => __('Contact'),
+            'render_template'   => 'template-parts/blocks/contact-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'text' ),
+        ));
+
+        // Map
+        acf_register_block_type(array(
+            'name'              => 'map-block',
+            'title'             => __('Map'),
+            'description'       => __('Map'),
+            'render_template'   => 'template-parts/blocks/map-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'text' ),
+        ));
+
     }
 }
 
