@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-get_header( 'shop' );
+get_header( '' );
 
 ?>
  
@@ -78,10 +78,10 @@ get_header( 'shop' );
 				?>
 			</div>
 
-			<div class="col-12 col-lg-9 col-xxl-10 js-woo-product-page" data-products="8">
-			</div>
+			<!-- <div class="col-12 col-lg-9 col-xxl-10 js-woo-product-page" data-products="8">
+			</div> -->
 
-			<div style="display:none;">
+			<div class="col-12 col-lg-9 col-xxl-10">
 				<?php
 					if ( woocommerce_product_loop() ) {
 

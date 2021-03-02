@@ -238,7 +238,7 @@ body.woo-variation-swatches.wvs-style-squared .variable-items-wrapper .variable-
     border: 1px solid $gray !important;
     box-shadow: initial !important;
     color: $gray;
-    &:focus-within, &:hover {
+    &:focus-within, &:hover, &.selected {
         color: white;
         background-color: $purple;
         border: 1px solid $purple !important;

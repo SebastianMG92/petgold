@@ -157,3 +157,12 @@
         font-weight: 600;
     }
 }
+
+
+.footer.footerSimple {
+    margin-top: 0;
+    padding: 70px 0;
+    @include breakpoint(md) {
+        padding: 70px 0;
+    }
+}

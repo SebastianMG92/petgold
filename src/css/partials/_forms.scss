@@ -26,3 +26,56 @@ form {
         
     }
 }
+
+
+.formContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    .one-column, .two-column {
+        flex-basis: 100%;
+        margin: 0 10px 10px;
+    }
+    label {
+        color: $green;
+        font-weight: bold;
+    }
+    input:not([type="submit"]), textarea {
+        display: block;
+        width: 100%;
+        border-radius: 20px;
+        border: 1px solid $gray-3;
+        padding: 10px;
+        margin: 8px 0;
+    }
+    input[type="submit"] {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        border: 0;
+        padding: 10px 30px;
+        line-height: 1;
+        text-decoration: none;
+        transition: .3s ease-out;
+        border-radius: 20px;
+        transition: .3s ease;
+        background-color: $purple;
+        color: white;
+        cursor: pointer;
+        &:hover, &:focus {
+            background-color: $purple-2;
+        }
+    }
+    .ajax-loader {
+        display: block;
+    }
+    .wpcf7-response-output {
+        background-color: white;
+    }
+    @include breakpoint(md) {
+        .two-column {
+            max-width: calc(50% - 20px);
+            flex-basis: calc(50% - 20px);
+        }
+    }
+}

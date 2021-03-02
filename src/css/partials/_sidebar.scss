@@ -135,13 +135,55 @@
                 color: $black-1;
             }
         }
-        // .cat-item {
-        //     padding: 15px 0;
-        //     border-bottom: 1px solid $gray-2;
-        //     &:last-child {
-        //         border-bottom: 0px;
-        //     }
-        // }
+        a {
+            display: block;
+            color: $green;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+    .widget.widget_categories {
+        ul {
+            margin: 30px 0 0;
+            padding: 0;
+            list-style: none;
+            & > .cat-item {
+                position: relative;
+                background-image: url(../assets/icons/arrow-right-green.svg);
+                background-repeat: no-repeat;
+                background-position: right 18px;
+                background-size: 8px;
+                padding: 15px 0;
+                border-bottom: 1px solid $gray-2;
+                &:first-child {
+                    border-top: 1px solid $gray-2;
+                }
+                &:last-child {
+                    border-bottom: 0px;
+                }
+                .count {
+                    display: none;
+                }
+            }   
+        }
+        .children {
+            padding: 0;
+            list-style: none;
+            margin: 10px 0 10px 10px;
+            .cat-item {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0;
+                .count {
+                    display: block;
+                }
+            }
+            a {
+                font-weight: normal;
+                color: $black-1;
+            }
+        }
         a {
             display: block;
             color: $green;
@@ -151,6 +193,58 @@
         }
     }
 
+    .widget.widget_recent {
+        .recent-post {
+            margin: 30px 0 0;
+            padding: 0;
+            list-style: none;
+            & > .recent-post-item {
+                position: relative;
+                padding: 0;
+                margin: 0 0 15px;
+                &:last-child {
+                    margin: 0;
+                }
+                a {
+                    display: flex;
+                    align-items: flex-start;
+                    text-decoration: none;
+                    color: $green;
+                    line-height: 1;
+                    font-weight: bold;
+                }
+                img {
+                    object-fit: cover;
+                    height: 50px;
+                    width: 50px;
+                    margin: 0 5px 0 0;
+                }
+                p {
+                    margin: 0;
+                }
+            }   
+        }
+    }
+    .widget.widget_archive {
+        ul {
+            margin: 30px 0 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        a {
+            display: block;
+            color: $green;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 10px 5px 0;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+    }
     @include breakpoint(md) {
         max-width: 500px;
         .price_slider_amount .button {
@@ -164,3 +258,9 @@
 }
 
 
+.sidebar.sidebar-blog {
+    padding: 50px 0 0;
+    @include breakpoint(lg) {
+        top: 60px;
+    }
+}

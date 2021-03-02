@@ -16,7 +16,7 @@ body
     &.hidde-overlay
         position: relative
         overflow: hidden
-        max-height: 100vh
+        min-height: 100vh
         &::after
             top: 0
             left: 0
@@ -100,6 +100,9 @@ p.text, .text p, .text
 .btn
     font-family: $font-main
     cursor: pointer
+    &.disabled
+        pointer-events: none
+        opacity: .3
 
 .btn-solid
     position: relative
@@ -171,12 +174,31 @@ p.text, .text p, .text
     text-decoration: none
     transition: .3s ease-out
     border-radius: 20px
+    cursor: pointer
     transition: .3s ease
     &.btn-purple
         background-color: $purple
         color: white
         &:hover, &:focus
             background-color: $purple-2
+
+
+.btn-share
+    background-color: transparent
+    border: 0
+    box-shadow: initial
+    padding: 5px
+    svg
+        display: block
+        width: 30px
+        transition: .3s ease
+        border-radius: 100%
+    &.btn-white
+        svg
+            fill: #fff
+    &.btn-green
+        svg
+            fill: $green
 
 /////////////////
 //paddings
@@ -201,6 +223,8 @@ p.text, .text p, .text
 
 .text-center
     text-align: center
+
+
 
 .js-lazy-bg
     background-image: var(--background-image)

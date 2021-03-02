@@ -8,6 +8,8 @@
 /////// LIBRARIES CSS
 import 'bootstrap/dist/css/bootstrap-grid.css';
 import 'swiper/css/swiper.css';
+import "glightbox/dist/css/glightbox.css";
+
 /////// MAIN CSS
 import '../css/style.sass';
 
@@ -27,8 +29,15 @@ gsap.registerPlugin(TweenMax, TimelineMax, Power2, Linear, Back, ScrollTrigger);
 //swiper
 import Swiper from "swiper";
 
+// Glightbox
+import GLightbox from "glightbox";
+
 // Woocommerce
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+
+
+// Share.js
+import "sharer.js";
 
 //////////////////////////
 // General functions
@@ -947,6 +956,101 @@ class Animations {
   }
 }
 
+// Lightboxes
+class Lightboxes {
+  constructor() {
+    this.lightboxes = document.querySelectorAll('.js-lightbox');
+    this.galleryImages = document.querySelectorAll('.js-lightbox-gallery');
+    this.start();
+  }
+  start() {
+
+    if (this.lightboxes.length > 0) {
+      for (let i = 0; i < this.lightboxes.length; i++) {
+        const button = this.lightboxes[i];
+        const lightbox = button.nextElementSibling
+        const close = lightbox.querySelector('.js-lightbox-close');
+
+        close.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          document.body.classList.remove("hidde-overlay");
+          lightbox.classList.remove("show");
+          lightbox.style.opacity = 0;
+
+          //Captcha
+          if (this.captcha) {
+            this.captcha.classList.add("hidde");
+          }
+        });
+
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          document.body.classList.add("hidde-overlay");
+          lightbox.classList.add("show");
+
+          gsap
+            .to(lightbox, {
+              duration: 0.5,
+              opacity: 1,
+            })
+            .delay(0.2);
+        });
+
+      }
+    }
+
+    if (this.galleryImages.length > 0) {
+      for (let i = 0; i < this.galleryImages.length; i++) {
+        const container = this.galleryImages[i];
+        const images = container.querySelectorAll('.js-lightbox-gallery-item');
+        
+        for (let j = 0; j < images.length; j++) {
+          const image = images[j];
+          image.classList.add(`js-lightbox-gallery-item-${i}`)
+        }
+
+        var lightbox = GLightbox({
+          selector: `.js-lightbox-gallery-item-${i}`,
+        });
+
+      }
+    }
+
+  }
+}
+
+// Gallery
+class Gallery {
+  constructor() {
+    this.gallery = document.querySelectorAll('.js-gallery')
+    this.start();
+  }
+  start() {
+    if (this.gallery.length > 0) {
+      for (let i = 0; i < this.gallery.length; i++) {
+        const gallery = this.gallery[i];
+        const btn = gallery.querySelector('.js-gallery-btn');
+        const images = gallery.querySelectorAll('.js-gallery-img.hidde .image');
+
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            image.parentElement.parentElement.classList.remove('hidde');
+            const dummie = document.createElement('img'); 
+            dummie.src = image.dataset.src;
+            dummie.onload = () => image.classList.add('loaded');
+            btn.classList.add('disabled');
+          }
+
+        });
+
+      }
+    }
+  }
+}
 
 ////////////////////
 // Run apps
@@ -959,6 +1063,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var product = new ProductTabs();
   var accordion = new Accordion();
   var animations = new Animations();
+  var lightboxes = new Lightboxes();
+  var gallery = new Gallery();
+
 });
 
 ////////////////////

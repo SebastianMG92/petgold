@@ -36,6 +36,14 @@
     }
 }
 
+.productGrid__container {
+    @include breakpoint(lg) {
+        padding-left: 20px;
+    }
+    @include breakpoint(xl) {
+        padding-left: 50px;
+    }
+}
 
 .productGrid__grid--container {
     padding: 0;
@@ -45,28 +53,6 @@
         display: flex;
         flex-wrap: wrap;
     }
-    @include breakpoint(lg) {
-        &.custom-columns-1 {
-            .productGrid__grid--product {
-                flex-basis: calc(100% - 20px);
-            }
-        }
-        &.custom-columns-2 {
-            .productGrid__grid--product {
-                flex-basis: calc(100% / 2 - 20px);
-            }
-        }
-        &.custom-columns-3 {
-            .productGrid__grid--product {
-                flex-basis: calc(100% / 3 - 20px);
-            }
-        }
-        &.custom-columns-4 {
-            .productGrid__grid--product {
-                flex-basis: calc(100% / 4 - 20px);
-            }
-        }
-    }
 }
 
 .productGrid__grid--product {
@@ -75,6 +61,10 @@
     text-align: center;
     max-width: 300px;
     margin: 0 auto 30px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     .woocommerce-loop-product__link {
         display: block;
         text-decoration: none;
@@ -84,15 +74,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            top: -50px;
+            top: -40px;
             right: -20px;
             padding: 10px;
-            width: 70px;
-            height: 70px;
+            width: 50px;
+            height: 50px;
             background-color: $green;
             color: white;
             border-radius: 50%;
             font-weight: bold;
+            font-size: 12px;
         }
     }
     img {
@@ -104,6 +95,7 @@
         font-weight: 600;
         margin: 0 0 10px;
         color: $black;
+        font-size: 18px;
     }
     .price {
         color: $black;
@@ -116,7 +108,73 @@
             font-weight: bold;
         }
     }
-    .button {
+    .product_type_variable {
+        display: none;
+    }
+    @include breakpoint(md) {
+        flex-basis: 50%;
+    }
+    @include breakpoint(lg) {
+        max-width: initial;
+        margin: 0 10px 30px;
+        flex-basis: calc(100% / 3 - 20px);
+    }
+    @include breakpoint(xxl) {
+        flex-basis: calc(100% / 4 - 20px);
+    }
+}
+
+// Cart variable product
+.productGrid__grid--product.product-type-variable form.cart {
+    table.variations {
+        margin: 0 0 5px;
+        .reset_variations {
+            color: $purple;
+        }
+        .label {
+            display: none;
+        }
+    }
+    .woocommerce-variation-add-to-cart {
+        display: flex;
+        input[type="number"] {
+            max-width: 60px;
+            border-radius: 20px 0 0 20px;
+            height: 100%;
+        }
+        button[type="submit"] {
+            font-family: $font-main;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            border: 0;
+            padding: 9px 12px;
+            line-height: 1;
+            text-decoration: none;
+            transition: .3s ease-out;
+            border-radius: 0 20px 20px 0;
+            background-color: $purple;
+            color: white;
+            margin: 0;
+            flex-grow: 1;
+            &.disabled {
+                opacity: .3;
+            }
+        }
+    }
+}
+
+// Cart single product
+.productGrid__grid--product.product-type-simple form.cart {
+    display: flex;
+    margin: 5px 0 0;
+    input[type="number"] {
+        max-width: 60px;
+        border-radius: 20px 0 0 20px;
+        height: 100%;
+    }
+    button[type="submit"] {
         font-family: $font-main;
         cursor: pointer;
         position: relative;
@@ -127,26 +185,13 @@
         line-height: 1;
         text-decoration: none;
         transition: .3s ease-out;
-        border-radius: 20px;
+        border-radius: 0 20px 20px 0;
         background-color: $purple;
         color: white;
-        margin: 30px 0 0;
-    }
-    @include breakpoint(md) {
-        flex-basis: 50%;
-    }
-    @include breakpoint(lg) {
-        max-width: initial;
-        margin: 0 10px 30px;
-    }
-}
-
-
-.productGrid__container {
-    @include breakpoint(lg) {
-        padding-left: 20px;
-    }
-    @include breakpoint(xl) {
-        padding-left: 50px;
+        margin: 0;
+        flex-grow: 1;
+        &.disabled {
+            opacity: .3;
+        }
     }
 }

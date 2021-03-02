@@ -1,4 +1,4 @@
-.site-main
+.site-main, .blogSingle__content
     & > *:not(section):not(.container-fluid):not(.mask-iframe)
         padding-left: 15px
         padding-right: 15px
@@ -54,9 +54,11 @@
         & *
             font-size: inherit
         strong, b
-            font-weight: 500
+            font-weight: 700
         a
-            color: inherit
+            color: $purple
+            display: inline
+            font-weight: 600
         ol, ul
             padding-left: 20px
             margin: 0
@@ -64,7 +66,7 @@
                 // font-family: $font-third
                 margin-bottom: 5px
 
-.wp-block-column, .wp-block-group__inner-container, .woocommerce-Tabs-panel
+.wp-block-column, .wp-block-group__inner-container, .woocommerce-Tabs-panel, .blogSingle__content
     & > h1, & > h2, & > h3, & > h4, & > h5, & > h6
         font-family: $font-main
         margin-bottom: 15px

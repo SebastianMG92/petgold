@@ -56,9 +56,10 @@ $map = get_field('iframe') ?: '';
 ?>
 
 <section id="<?php echo esc_attr($id); ?>" class="mapBlock custom-paddings <?php echo esc_attr($className); ?>" style="--pt-desktop:<?php echo $pt_desktop; ?>px;--pb-desktop:<?php echo $pb_desktop; ?>px; --pt-mobile:<?php echo $pt_desktop; ?>px; --pb-mobile:<?php echo $pb_mobile; ?>px;">
-    <svg class="mapBlock__top" viewBox="0 0 1440.06 64.28"><path d="M1440.06,28.1l-60,14.06c-60,14.06-162,24.11-282,21.78-120-2.5-250-49-370-53.8s-254,36.13-376.15,38C232.5,59,0,0,0,0H1440.06Z" transform="translate(0 0)"/></svg>
-    <?php echo $map; ?>
-
-    <svg class="mapBlock__bottom" viewBox="0 0 1440 64.3"><path d="M.59,46.13l60-14.06c60-14.06,162-24.11,282-21.78,120,2.5,250,49,370,53.8s254-36.13,376.15-38c119.41-10.81,351.91,48.14,351.91,48.14H.59Z" transform="translate(-0.59 -9.95)"></path></svg>
+    
+    <div class="mapBlock__container">
+        <svg class="mapBlock__top" viewBox="0 0 1440.06 64.28"><path d="M1440.06,28.1l-60,14.06c-60,14.06-162,24.11-282,21.78-120-2.5-250-49-370-53.8s-254,36.13-376.15,38C232.5,59,0,0,0,0H1440.06Z" transform="translate(0 0)"/></svg>
+        <?php echo $map; ?>
+    </div>
 
 </section>

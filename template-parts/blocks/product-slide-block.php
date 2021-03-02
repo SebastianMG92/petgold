@@ -110,68 +110,23 @@ $position = get_field('alineacion') ?: '';
                         <div class="swiper-container js-product-slide productSlider__swiper--slide">
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
-
                                 <?php if( $dog_products ): ?>
-                                    <?php foreach( $dog_products as $dog_product ): 
-                                        global $woocommerce; 
-                                        // Woo data
-                                        $product = wc_get_product($dog_product->ID);
-
-                                        $currency = get_woocommerce_currency_symbol();
-                                        $price = get_post_meta( $dog_product->ID, '_regular_price', true);
-                                        $sale = get_post_meta( $dog_product->ID, '_sale_price', true);
-
-                                        $permalink = get_permalink( $dog_product->ID );
-                                        $title = get_the_title( $dog_product->ID );
-
-                                        $thumbnail_id = get_post_thumbnail_id( $dog_product->ID );
-                                        $alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
-
+                                    <?php
+                                        $args = array(
+                                            'post_type' => 'product',
+                                            'post__in' =>  $dog_products,
+                                        );
+                                        $loop = new WP_Query( $args );
+                                        if ( $loop->have_posts() ) {
+                                            while ( $loop->have_posts() ) : $loop->the_post();
+                                                wc_get_template_part( 'content', 'product-slide' );
+                                            endwhile;
+                                        } else {
+                                            echo __( 'No products found' );
+                                        }
+                                        wp_reset_postdata();
                                     ?>
-                                        <!-- Slides -->
-                                        <div class="swiper-slide">
-                                            <div class="productSlider__product">
-                                                <div>
-                                                    <a class="productSlider__product--link" href="<?php echo $permalink; ?>">
-                                                        <figure class="productSlider__product--img">
-                                                            <img data-src="<?php echo get_the_post_thumbnail_url($dog_product->ID);?>" class="swiper-lazy" alt="<?php echo $alt; ?>">
-                                                            <div class="swiper-lazy-preloader"></div>
-                                                        </figure>
-                                                    </a>
-                                                    <div class="productSlider__product--content">
-                                                        <?php if (!empty( get_the_terms( $dog_product->ID, 'product_cat' ) ) ) : ?>
-                                                            <?php 
-                                                                $terms = get_the_terms($dog_product->ID, 'product_cat');
-                                                                $separator = ', ';
-                                                                $output = '';
-                                                                $output .= "<a href=" . get_term_link( $terms[0] ) . ">" . esc_html( $terms[0]->name ) . "</a>" . $separator;?>
-                                                                <span class="category">
-                                                                    <?php echo trim( $output, $separator ); ?>
-                                                                    </span>
-                                                            <?php else: ?>
-                                                                <span class="category">
-                                                                    <a href="#"></a>
-                                                                </span>
-                                                        <?php endif; ?>
-                                                        <a href="<?php echo $permalink; ?>" class="productSlider__product--link">
-                                                            <h3 class="heading"><?php echo $title; ?></h3>
-                                                            <?php if($product->product_type == 'variable') : ?>
-                                                                <p class="price"><?php echo wc_price($product->get_price_including_tax(1,$product->get_price())); ?></p> 
-                                                            <?php else : ?>
-            
-                                                                <p class="price"><?php echo wc_price($product->get_price_including_tax(1,$product->get_price())); ?></p> 
-                                                            <?php endif; ?>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="productSlider__product--cart">
-                                                    <?php echo do_shortcode("[add_to_cart_form id=" . $dog_product->ID . "]"); ?> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
                                 <?php endif; ?>
-
                             </div>
                             <!-- If we need pagination -->
                             <div class="swiper-pagination js-product-slide-pagination"></div>
@@ -188,63 +143,21 @@ $position = get_field('alineacion') ?: '';
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <?php if( $cat_products ): ?>
-                                    <?php foreach( $cat_products as $cat_product ): 
-                                        global $woocommerce; 
-                                        // Woo data
-                                        $product = wc_get_product($cat_product->ID);
-
-                                        $currency = get_woocommerce_currency_symbol();
-                                        $price = get_post_meta( $cat_product->ID, '_regular_price', true);
-                                        $sale = get_post_meta( $cat_product->ID, '_sale_price', true);
-
-                                        $permalink = get_permalink( $cat_product->ID );
-                                        $title = get_the_title( $cat_product->ID );
-
-                                        $thumbnail_id = get_post_thumbnail_id( $cat_product->ID );
-                                        $alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
+                                    <?php
+                                        $args = array(
+                                            'post_type' => 'product',
+                                            'post__in' =>  $cat_products,
+                                        );
+                                        $loop = new WP_Query( $args );
+                                        if ( $loop->have_posts() ) {
+                                            while ( $loop->have_posts() ) : $loop->the_post();
+                                                wc_get_template_part( 'content', 'product-slide' );
+                                            endwhile;
+                                        } else {
+                                            echo __( 'No products found' );
+                                        }
+                                        wp_reset_postdata();
                                     ?>
-                                        <!-- Slides -->
-                                        <div class="swiper-slide">
-                                            <div class="productSlider__product">
-                                                <div>
-                                                    <a class="productSlider__product--link" href="<?php echo $permalink; ?>">
-                                                        <figure class="productSlider__product--img">
-                                                            <img data-src="<?php echo get_the_post_thumbnail_url($cat_product->ID);?>" class="swiper-lazy" alt="<?php echo $alt; ?>">
-                                                            <div class="swiper-lazy-preloader"></div>
-                                                        </figure>
-                                                    </a>
-                                                    <div class="productSlider__product--content">
-                                                        <?php if (!empty( get_the_terms( $cat_product->ID, 'product_cat' ) ) ) : ?>
-                                                            <?php 
-                                                                $terms = get_the_terms($cat_product->ID, 'product_cat');
-                                                                $separator = ', ';
-                                                                $output = '';
-                                                                $output .= "<a href=" . get_term_link( $terms[0] ) . ">" . esc_html( $terms[0]->name ) . "</a>" . $separator;?>
-                                                                <span class="category">
-                                                                    <?php echo trim( $output, $separator ); ?>
-                                                                    </span>
-                                                            <?php else: ?>
-                                                                <span class="category">
-                                                                    <a href="#"></a>
-                                                                </span>
-                                                        <?php endif; ?>
-                                                        <a href="<?php echo $permalink; ?>" class="productSlider__product--link">
-                                                            <h3 class="heading"><?php echo $title; ?></h3>
-                                                            <?php if($product->product_type == 'variable') : ?>
-                                                                <p class="price"><?php echo wc_price($product->get_price_including_tax(1,$product->get_price())); ?></p> 
-                                                            <?php else : ?>
-                                                                <p class="price"><?php echo wc_price($product->get_price_including_tax(1,$product->get_price())); ?></p> 
-                                                            <?php endif; ?> 
-                                                        </a>
-                                                        
-                                                    </div>
-                                                </div>
-                                                <div class="productSlider__product--cart">
-                                                    <?php echo do_shortcode("[add_to_cart_form id=" . $cat_product->ID . "]"); ?> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
                             <!-- If we need pagination -->

@@ -161,6 +161,18 @@ function custom_blocks() {
             'keywords'          => array( 'text' ),
         ));
 
+        // Gallery
+        acf_register_block_type(array(
+            'name'              => 'gallery-block',
+            'title'             => __('Gallery'),
+            'description'       => __('Gallery'),
+            'render_template'   => 'template-parts/blocks/gallery-block.php',
+            'category'          => 'petgold',
+            'icon'              => 'admin-comments',
+            'mode'              => 'preview',
+            'keywords'          => array( 'text' ),
+        ));
+
     }
 }
 
