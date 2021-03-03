@@ -681,15 +681,12 @@ class Sliders {
             // when window width is >= 640px
             992: {
               slidesPerView: 2,
-              spaceBetween: 10
             },
             1200: {
               slidesPerView: 3,
-              spaceBetween: 10
             },
             1400: {
               slidesPerView: 4,
-              spaceBetween: 10
             }
           }
         })
