@@ -40,7 +40,7 @@ form {
         color: $green;
         font-weight: bold;
     }
-    input:not([type="submit"]), textarea {
+    input:not([type="submit"]):not([type="checkbox"]), textarea {
         display: block;
         width: 100%;
         border-radius: 20px;
