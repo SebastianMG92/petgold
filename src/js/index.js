@@ -326,233 +326,29 @@ class Header {
 class Woocommerce {
   constructor() {
     // Shop page
-    this.wooShop = document.querySelector('.js-woo-product-page');
+    this.cartButton = document.querySelector('.js-header-cart');
     this.start();
   }
   start() {
-
-    this.api = new WooCommerceRestApi({
-      url: window.location.origin,
-      consumerKey: "ck_13097343a23c2565069b3bc2bd38acceca143ab7",
-      consumerSecret: "cs_55294a0f6482a89889ec4f1fe3a34731f8da754b",
-      version: "wc/v3",
-    });
-
     // If shop page
-    if (this.wooShop) {
-      this.shopPage(this.wooShop);
-    }
-  }
-  getProducts(endpoint, config) {
-    // List products
-    return this.api.get(endpoint, config)
-      .then((response) => {
-        // Successful request
-        return response.data;
-        // console.log("Response Data:", response.data);
-        // console.log("Total of pages:", response.headers['x-wp-totalpages']);
-        // console.log("Total of items:", response.headers['x-wp-total']);
-      })
-      .catch((error) => {
-        // Invalid request, for 4xx and 5xx statuses
-        console.log("Response Status:", error.response.status);
-        console.log("Response Headers:", error.response.headers);
-        console.log("Response Data:", error.response.data);
-      })
-      .finally(() => {
-        // Always executed.
+    if (this.cartButton) {
+      const button = this.cartButton;
+      const mini_cart = document.querySelector('.js-mini-cart');
+      const close = mini_cart.querySelector('.js-mini-cart-close');
+      button.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.classList.add('hidde-overlay-complete');
+        mini_cart.classList.add('active');
       });
-  };
-  getOutput(product) {
-      // Price html output
-      const priceOutput = (product) => {
-        let output;
-        if (product.type === 'simple') {
-          output = `
-            <div class="price">
-              ${product.on_sale ? 
-                `<span class="normal_price">$${product.regular_price}</span> - <span class="sale_price">$${product.sale_price}</span>`
-                :
-                `<span class="regular_price">$${product.regular_price}</span>`
-              }
-            </div>
-          `
-        } else {
-          output = `
-            ${product.product_variations.map((variation, index) => 
-              variation.on_sale ? 
-              `<div class="dynamic_price ${index === 0 ? `active` : ``}" data-id="${variation.id}">
-                <span class="normal_price">$${variation.regular_price}</span> - <span class="sale_price">$${variation.sale_price}</span>
-              </div>` 
-              : 
-              `<div class="dynamic_price ${index === 0 ? `active` : ``}" data-id="${variation.id}">
-                <span class="regular_price">$${variation.regular_price}</span>
-              </div>`
-            ).join('')}
-          `
-        }
-        return output;
-      };
-      // Variation html output
-      const variationOutput = (product) => {
-        let output;
-        if (product.type === 'simple') {
-          output = `
-          <form class="woocommerce cart" action="${product.permalink}">
-            <div class="woocommerce__add_to_cart">
-              <input type="number" min="1" name="quantity" value="1" title="Cantidad" inputmode="numeric">
-              <button name="add-to-cart" type="submit" value="${product.id}" class="single_add_to_cart_button button alt">Añadir al carrito</button>
-            </div>
-          </form>
-          `;
-        } else {
-          const valid_variations = product.product_variations;
 
-          // Create an object with variations
-          const list_variations = {};
-          for (let i = 0; i < valid_variations.length; i++) {
-            const group = valid_variations[i].attributes;
-            for (let i = 0; i < group.length; i++) {
-              const item = group[i];
-              if (!list_variations[item.slug]) {
-                list_variations[item.slug] = []
-              }
-              if (list_variations[item.slug]) {
-                list_variations[item.slug].pushIfNotExist(item.title, function(e) { 
-                  return e === item.title;
-                });
-              }
-            }
-          };
-          
-          output = `
-          <form class="woocommerce cart" action="${product.permalink}" data-product-variations='${JSON.stringify(valid_variations)}'>
-            <div class="variables">
-              ${
-                Object.entries(list_variations).map(group => `
-                  <div class="variable">
-                    <div class="variable__options">
-                      ${group[1].map((opt, index) => `
-                        <label>
-                          <input type="radio" value="${opt}" name="${group[0]}" ${index === 0 ? 'checked' : ''}>
-                          ${opt}
-                        </label>
-                      `).join('')}
-                    </div>
-                  </div>
-                `).join('')
-              }
-            </div>
-            <div class="woocommerce__add_to_cart">
-              <input type="number" min="1" name="quantity" value="1" title="Cantidad" inputmode="numeric">
-              <button type="submit" class="single_add_to_cart_button button alt disabled wc-variation-selection-needed">Añadir al carrito</button>
-              <input type="hidden" name="product_id" value="${product.id}">
-              <input type="hidden" name="variation_id" class="variation_id" value="0">
-            </div>
-          </form>
-          `;
-        }
-        return output;
-      };
-      return `
-        <div class="productSlider__product ${product.type === 'variable' ? `js-product-variations` : ''}">
-          <div>
-            <a class="productSlider__product--link" href="${product.permalink}">
-                <figure class="productSlider__product--img">
-                    <img class="" alt="${product.images[0].alt}" src="${product.images[0].src}">
-                </figure>
-            </a>
-            <div class="productSlider__product--content">
-                <span class="category">
-                  ${product.categories ? product.categories.map(cat => cat.name) : ''}                                                                 
-                </span>
-                <a href="${product.permalink}" class="productSlider__product--link">
-                    <h3 class="heading">${product.name}</h3>
-                    <p class="price">
-                      ${priceOutput(product)}
-                    </p> 
-                </a>
-            </div>
-          </div>
+      close.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.classList.remove('hidde-overlay-complete');
+        mini_cart.classList.remove('active');
+      });
 
-          <div class="productSlider__product--cart">
-            ${variationOutput(product)}
-          </div>
-        </div>
-      `
-  };
-  variableSystem(products) {
-
-    for (let i = 0; i < products.length; i++) {
-      const product = products[i];
-      const form = product.querySelector('.woocommerce');
-      const variable_checkboxes = form.querySelectorAll('input[type="radio"]');
-      const variable_data = JSON.parse(form.dataset.productVariations);
-      const options = {
-        includeScore: true,
-        keys: ['attributes.option']
-      };
-      const fuse = new Fuse(variable_data, options)
-      let state = {};
-
-      for (let i = 0; i < variable_checkboxes.length; i++) {
-        const checkbox = variable_checkboxes[i];
-        
-        // Add categories of variations
-        if (!state[checkbox.name]) {
-          state[checkbox.name] = [];
-        }
-
-        checkbox.addEventListener('change', e => {
-          e.preventDefault();
-          const category = checkbox.name;
-          if (state[category].length > 0) {
-            state[category] = [];
-          }
-
-          state[category].push(checkbox.value);
-
-          // if (checkbox.checked) {
-          //   state.checked.push(checkbox.value);
-          // } else {
-          //   state.checked = state.checked.filter(item => item !== checkbox.value);
-          // }
-
-
-
-          console.log(state);
-        });
-        
-      }
-      
-      // console.log(state);
-      // console.log(variable_checkboxes);
-      // console.log(variable_data);
 
     }
-
-  }
-  async shopPage(container) {
-    
-    // Get products
-    let config = {
-      per_page: container.dataset.products ? container.dataset.products : 6,
-      orderby: "popularity",
-      status: "publish",
-      min_price: 1,
-    };
-    const products = await this.getProducts(`products`, config);
-
-    // Building html
-    let output = await products.map( product => this.getOutput(product));
-
-    // Print data
-    let newItem = document.createElement('div');
-    newItem.classList.add('productGrid__container');
-    newItem.innerHTML = output.join('');
-    const variable_elements =  newItem.querySelectorAll('.js-product-variations');
-    variable_elements.length > 0 && this.variableSystem(variable_elements);
-    container.appendChild(newItem);
   }
 }
 

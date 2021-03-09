@@ -157,7 +157,7 @@ function petgold_scripts() {
 	wp_enqueue_style( 'petgold-style-main', get_template_directory_uri() . '/dist/bundle.css', '',  _S_VERSION);
 
 	// wp_enqueue_script( 'petgold-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
-	// wp_enqueue_script('petgold-ajax-js', get_bloginfo('stylesheet_directory') . '/js/ajax-add-to-cart.js', array('jquery'),'1.0' );
+	wp_enqueue_script('petgold-ajax-js', get_bloginfo('stylesheet_directory') . '/js/ajax-add-to-cart.js', array('jquery'),'1.0' );
 	wp_enqueue_script( 'petgold-js-main', get_template_directory_uri() . '/dist/bundle.js', array(), _S_VERSION, true );
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -268,39 +268,6 @@ add_action ('after_setup_theme', 'woocommerce_support');
 // Breadcumbs
 remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0);
 
-
-// Add ajax add to cart
-add_action('wp_ajax_woocommerce_ajax_add_to_cart', 'woocommerce_ajax_add_to_cart');
-// add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', 'woocommerce_ajax_add_to_cart');
-        
-// function woocommerce_ajax_add_to_cart() {
-
-// 	$product_id = apply_filters('woocommerce_add_to_cart_product_id', absint($_POST['product_id']));
-// 	$quantity = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
-// 	$variation_id = absint($_POST['variation_id']);
-// 	$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity);
-// 	$product_status = get_post_status($product_id);
-
-// 	if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id) && 'publish' === $product_status) {
-
-// 		do_action('woocommerce_ajax_added_to_cart', $product_id);
-
-// 		if ('yes' === get_option('woocommerce_cart_redirect_after_add')) {
-// 			wc_add_to_cart_message(array($product_id => $quantity), true);
-// 		}
-
-// 		WC_AJAX :: get_refreshed_fragments();
-// 	} else {
-
-// 		$data = array(
-// 			'error' => true,
-// 			'product_url' => apply_filters('woocommerce_cart_redirect_after_error', get_permalink($product_id), $product_id));
-
-// 		echo wp_send_json($data);
-// 	}
-
-// 	wp_die();
-// }
 
 // Color picker
 global $client_colors;
@@ -416,3 +383,51 @@ function shop_variable_product_price( $price, $product ){
     return $price;
 }
 
+
+
+add_action('wp_ajax_woocommerce_ajax_add_to_cart', 'woocommerce_ajax_add_to_cart');
+add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', 'woocommerce_ajax_add_to_cart');
+
+function woocommerce_ajax_add_to_cart() {
+
+    $product_id = apply_filters('woocommerce_add_to_cart_product_id', absint($_POST['product_id']));
+    $quantity = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+    $variation_id = absint($_POST['variation_id']);
+    // This is where you extra meta-data goes in
+    $cart_item_data = $_POST['meta'];
+    $passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity);
+    $product_status = get_post_status($product_id);
+
+    // Remember to add $cart_item_data to WC->cart->add_to_cart
+    if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $cart_item_data) && 'publish' === $product_status) {
+
+        do_action('woocommerce_ajax_added_to_cart', $product_id);
+
+        if ('yes' === get_option('woocommerce_cart_redirect_after_add')) {
+            wc_add_to_cart_message(array($product_id => $quantity), true);
+        }
+
+        WC_AJAX :: get_refreshed_fragments();
+    } else {
+
+        $data = array(
+            'error' => true,
+            'product_url' => apply_filters('woocommerce_cart_redirect_after_error', get_permalink($product_id), $product_id));
+
+        echo wp_send_json($data);
+    }
+
+    wp_die();
+}
+
+
+add_filter( 'woocommerce_add_to_cart_fragments', 'misha_add_to_cart_fragment' );
+ 
+function misha_add_to_cart_fragment( $fragments ) {
+ 
+	global $woocommerce;
+ 
+	$fragments['.js-header-cart-number'] = '<div class="number js-header-cart-number">' . $woocommerce->cart->cart_contents_count . '</div>';
+ 	return $fragments;
+ 
+ }

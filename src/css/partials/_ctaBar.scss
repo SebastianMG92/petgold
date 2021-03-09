@@ -50,6 +50,7 @@
 
 .ctaBar__right--item {
     .link {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -57,6 +58,11 @@
         text-decoration: none;
         font-weight: bold;
         font-size: 14px;
+        appearance: none;
+        padding: 0;
+        background-color: transparent;
+        cursor: pointer;
+        border: 0;
         &:hover, &:focus {
             text-decoration: underline;
         }
@@ -65,6 +71,25 @@
             height: 20px;
             fill: white;
             margin: 0 5px 0 0;
+        }
+        .number {
+            position: absolute;
+            left: 14px;
+            top: -3px;
+            z-index: 1;
+            background: $purple;
+            color: white;
+            border-radius: 100%;
+            width: 12px;
+            height: 12px;
+            font-size: 10px;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            line-height: 1;
         }
     }
     @include breakpoint(md) {
